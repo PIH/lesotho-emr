@@ -1,0 +1,35 @@
+{
+  "browserWarning": "Please use the <b>Google Chrome</b> browser",
+
+  "welcomeMessage": "Welcome to the Lesotho EMR",
+  "country": "LESOTHO",
+  "site": "CROSS_SITE",
+  "components": [
+    "clinicianDashboard",
+    "myAccount",
+    "patientRegistration",
+    "radiology",
+    "systemAdministration",
+    "visitManagement",
+    "visitNote"
+  ],
+  "dashboardUrl": "/pihcore/router/programDashboard.page?patientId={{patientId}}",
+  "visitsPageUrl": "/pihcore/visit/visit.page?patient={{patient.uuid}}#/visitList",
+  "visitsPageWithSpecificUrl": "/pihcore/visit/visit.page?patient={{patient.uuid}}&visit={{visit.uuid}}#/overview",
+
+  "addressConfig": {
+    "manualFields": ["countyDistrict", "cityVillage"]
+  },
+
+  "registrationConfig": {
+    "allowUnknownPatients": false,
+    "allowManualEntryOfPrimaryIdentifier": true,
+    "afterCreatedUrl": "pihcore/patientRegistration/afterRegistration.page?patientId={{patientId}}&encounterId={{encounterId}}",
+    "similarPatientsSearch": {
+      "addressFields": {
+        "cityVillage": "1",
+        "countyDistrict": "1"
+      }
+    }
+  }
+}
