@@ -1,0 +1,25 @@
+<addressConfiguration>
+    <wipe>true</wipe>
+    <addressComponents>
+        <addressComponent>
+            <field>COUNTY_DISTRICT</field>
+            <nameMapping>District</nameMapping>
+            <sizeMapping>40</sizeMapping>
+            <requiredInHierarchy>false</requiredInHierarchy>
+        </addressComponent>
+        <addressComponent>
+            <field>CITY_VILLAGE</field>
+            <nameMapping>Village</nameMapping>
+            <sizeMapping>40</sizeMapping>
+            <requiredInHierarchy>false</requiredInHierarchy>
+        </addressComponent>
+    </addressComponents>
+    <lineByLineFormat>
+        <string>cityVillage, countyDistrict</string>
+    </lineByLineFormat>
+    <addressHierarchyFile>
+        <filename>lesotho_address_hierarchy_entries.csv</filename>
+        <entryDelimiter>\|</entryDelimiter>
+        <identifierDelimiter>\^</identifierDelimiter>
+    </addressHierarchyFile>
+</addressConfiguration>

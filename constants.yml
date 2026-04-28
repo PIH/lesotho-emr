@@ -1,0 +1,4 @@
+# Patient Identifier Types
+patientIdentifierType:
+  pihEmrNumber:
+    uuid: "17e79b97-808a-4a19-9b44-fc46dc579f75"
