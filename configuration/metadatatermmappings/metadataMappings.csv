@@ -1,2 +1,2 @@
 Uuid,Void/Retire,Mapping source,Mapping code,Metadata class name,Metadata uuid
-b75bff37-fa57-4ea0-95b8-6ce2f6ec362e,,org.openmrs.module.emrapi,emr.primaryIdentifierType,org.openmrs.PatientIdentifierType,${patientIdentifierType.pihEmrNumber.uuid}
+b75bff37-fa57-4ea0-95b8-6ce2f6ec362e,,org.openmrs.module.emrapi,emr.primaryIdentifierType,org.openmrs.PatientIdentifierType,${patientIdentifierType.sampleIdentifier.uuid}

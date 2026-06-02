@@ -1,2 +1,2 @@
 UUID,Void/Retire,Name,Description,Required,Format,Format description,Validator,Location behavior,Uniqueness behavior
-${patientIdentifierType.pihEmrNumber.uuid},,PIH EMR Number,A unique identifier issued to all patients in the PIH Lesotho EMR.,FALSE,[0-9]{2}-[0-9]{4}-[0-9]{1},2 digits - 4 digits - 1 digit (e.g. 12-3456-7),,NOT_USED,UNIQUE
+${patientIdentifierType.sampleIdentifier.uuid},,Sample Identifier,Sample identifier for testing,FALSE,"","",,NOT_USED,UNIQUE
