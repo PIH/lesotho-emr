@@ -1,4 +1,4 @@
-let'sopenmrs-config-lesotho
+openmrs-config-lesotho
 ==============================
 
 ### Prerequistes
