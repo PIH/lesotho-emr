@@ -1,0 +1,2 @@
+Uuid,Name,Identifier type,Base character set,First identifier base,Min length,Max length
+c8f25496-da86-45c3-a621-e9694d89f0b2,EMR ID Generator,${patientIdentifierType.emrId.uuid},ACDEFGHJKLMNPRTUVWXY1234567890,A00000,6,6

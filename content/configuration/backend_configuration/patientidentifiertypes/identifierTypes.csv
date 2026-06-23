@@ -1,0 +1,2 @@
+UUID,Void/Retire,Name,Description,Required,Format,Format description,Validator,Location behavior,Uniqueness behavior
+${patientIdentifierType.emrId.uuid},,EMR ID,EMR ID,FALSE,"","",,NOT_USED,UNIQUE

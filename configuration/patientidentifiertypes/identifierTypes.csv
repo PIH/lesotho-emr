@@ -1,2 +1,0 @@
-UUID,Void/Retire,Name,Description,Required,Format,Format description,Validator,Location behavior,Uniqueness behavior
-${patientIdentifierType.sampleIdentifier.uuid},,Sample Identifier,Sample identifier for testing,FALSE,"","",,NOT_USED,UNIQUE
