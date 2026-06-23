@@ -23,18 +23,20 @@ usage() {
     echo "Usage: $0 <site> <command>"
     echo ""
     echo "Sites:    botsabelo-demo"
-    echo "Commands: create | update | run | destroy"
+    echo "Commands: create | update | update-config | run | destroy"
     echo ""
-    echo "  create   Set up a new SDK server for the given site"
-    echo "  update   Redeploy updated artifacts to an existing server"
-    echo "  run      Start the server (use Ctrl+C to stop)"
-    echo "  destroy  Delete the server directory and drop its database"
+    echo "  create         Set up a new SDK server for the given site"
+    echo "  update         Redeploy updated artifacts to an existing server"
+    echo "  update-config  Redeploy configuration only to an existing server"
+    echo "  run            Start the server (use Ctrl+C to stop)"
+    echo "  destroy        Delete the server directory and drop its database"
     echo ""
     echo "Environment variable overrides:"
     echo "  SERVER_ID     Server ID (default: site name)"
     echo "  SERVER_PORT   Tomcat port (default: 8080)"
     echo "  DEBUG_PORT    Remote debug port (default: 1044)"
     echo "  JMX_PORT      Enable JMX monitoring on this port (default: disabled)"
+    echo "  JAVA_HOME     Java installation to use (default: system Java)"
     echo ""
     echo "Database:"
     echo "  (default)     SDK creates and manages its own Docker MySQL container"
@@ -45,8 +47,8 @@ usage() {
     echo "  DB_USER       Database user (default: root)"
     echo "  DB_PASSWORD   Database password (default: root)"
     echo ""
-    echo "Flags:"
-    echo "  --reset-db    Drop the existing database before create (if it already exists)"
+    echo "Flags (create only):"
+    echo "  --reset-db    Reset the existing database if one already exists (default: keep)"
     exit 1
 }
 
@@ -117,6 +119,10 @@ case "$COMMAND" in
     update)
         mvn clean install -U
         mvn openmrs-sdk:deploy -Ddistro="${SCRIPT_DIR}/distro/target/classes/openmrs-distro.properties" -DserverId="${SERVER_ID}"
+        ;;
+    update-config)
+        mvn clean install -U -pl content
+        mvn openmrs-sdk:deploy -Ddistro="${SCRIPT_DIR}/distro/target/classes/openmrs-distro.properties" -DserverId="${SERVER_ID}" -DconfigOnly=true
         ;;
     run)
         # Set JMX_PORT to enable JMX remote monitoring (e.g. JMX_PORT=9000 ./sdk.sh botsabelo-demo run)

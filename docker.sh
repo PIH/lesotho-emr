@@ -10,6 +10,29 @@ COMPOSE_FILE="$SCRIPT_DIR/docker/compose.yaml"
 SEED_COMPOSE_FILE="$SCRIPT_DIR/docker/compose.seed.yaml"
 ENV_FILE="$SCRIPT_DIR/docker/default.env"
 
+usage() {
+    echo "Usage: $0 <site> <command> [options]"
+    echo ""
+    echo "Sites:    botsabelo-demo"
+    echo "Commands: start | stop | update | wait | build | logs | destroy"
+    echo ""
+    echo "  start    Start the stack"
+    echo "  stop     Stop the running stack"
+    echo "  update   Stop then restart the stack"
+    echo "  wait     Block until OpenMRS finishes initializing (up to 60 minutes)"
+    echo "  build    Build the distribution and Docker image from source"
+    echo "  logs     Tail the container logs"
+    echo "  destroy  Stop the stack and delete all volumes"
+    echo ""
+    echo "Options:"
+    echo "  --build   Build the distribution from source before start/update"
+    echo "  --fresh   Start from scratch instead of using a pre-seeded image"
+    echo ""
+    echo "Environment variable overrides:"
+    echo "  TOMCAT_HTTP_PORT   Port OpenMRS is exposed on (default: 8080)"
+    exit 1
+}
+
 BUILD=false
 FRESH=false
 for arg in "$@"; do
@@ -19,18 +42,6 @@ for arg in "$@"; do
         *) echo "Unknown option: '$arg'"; echo ""; usage ;;
     esac
 done
-
-usage() {
-    echo "Usage: $0 <site> <command> [options]"
-    echo ""
-    echo "Sites:    botsabelo-demo"
-    echo "Commands: start | stop | update | wait | build | logs | destroy"
-    echo ""
-    echo "Options:"
-    echo "  --build   Build the distribution from source before starting"
-    echo "  --fresh   Initialize OpenMRS from scratch instead of using a pre-seeded image"
-    exit 1
-}
 
 case "$SITE" in
     botsabelo-demo)       PIH_CONFIG="lesotho,lesotho-botsabelo-demo" ;;
