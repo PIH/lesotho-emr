@@ -1,0 +1,2 @@
+Uuid,Name,Identifier type,Pool identifier source,Pool refill batch size,Pool minimum size,Pool refill with task,Pool sequential allocation
+4e8e404e-6f28-11f1-9293-c6dbcf623907,EMR ID Pool,${patientIdentifierType.emrId.uuid},c8f25496-da86-45c3-a621-e9694d89f0b2,10000,1000,false,false
