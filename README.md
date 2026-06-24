@@ -85,12 +85,14 @@ See [`docker/README.md`](docker/README.md) for the full Docker Compose reference
 Use `sdk.sh` to run a site using the [OpenMRS SDK](https://wiki.openmrs.org/display/docs/OpenMRS+SDK), which sets up a local Tomcat server with its own MySQL instance.
 
 ```
-./sdk.sh <site> <command>
+./sdk.sh <command> <server-id>
 ```
+
+The server ID is a local name of your choosing — it controls the server directory (`~/openmrs/<server-id>`) and defaults the database name. Examples below use `lesotho` but you can use anything.
 
 | Command | Description |
 |---|---|
-| `create` | Set up a new SDK server for the given site |
+| `create` | Set up a new SDK server |
 | `update` | Redeploy updated artifacts to an existing server |
 | `update-config` | Redeploy configuration only to an existing server |
 | `run` | Start the server (Ctrl+C to stop) |
@@ -98,46 +100,47 @@ Use `sdk.sh` to run a site using the [OpenMRS SDK](https://wiki.openmrs.org/disp
 
 **Example — first-time setup:**
 ```bash
-./sdk.sh botsabelo-demo create
-./sdk.sh botsabelo-demo run
+./sdk.sh create lesotho
+./sdk.sh run lesotho
 ```
 
 **Example — after updating component versions:**
 ```bash
-./sdk.sh botsabelo-demo update
-./sdk.sh botsabelo-demo run
+./sdk.sh update lesotho
+./sdk.sh run lesotho
 ```
 
 **Example — redeploy configuration only:**
 ```bash
-./sdk.sh botsabelo-demo update-config
-./sdk.sh botsabelo-demo run
+./sdk.sh update-config lesotho
+./sdk.sh run lesotho
 ```
 
 #### Environment variable overrides
 
-| Variable | Default | Description |
-|---|---|---|
-| `SERVER_ID` | site name | SDK server directory name |
-| `SERVER_PORT` | `8080` | Tomcat HTTP port |
-| `DEBUG_PORT` | `1044` | Remote debug port |
-| `JMX_PORT` | _(disabled)_ | Enable JMX monitoring on this port |
-| `DB_CONTAINER` | _(SDK-managed)_ | Connect to an existing Docker MySQL container |
-| `DB_HOST` | `localhost` | Database host (when `DB_CONTAINER` is set) |
-| `DB_PORT` | `3308` | Database port (when `DB_CONTAINER` is set) |
-| `DB_NAME` | server ID | Database name |
-| `DB_USER` | `root` | Database user |
-| `DB_PASSWORD` | `root` | Database password |
+| Variable | Default | Commands | Description |
+|---|---|---|---|
+| `SERVER_ID` | positional arg | all | SDK server directory name |
+| `PIH_CONFIG` | `lesotho,lesotho-botsabelo-demo` | `create` | PIH config profile passed to SDK setup |
+| `SERVER_PORT` | `8080` | `create` | Tomcat HTTP port |
+| `DEBUG_PORT` | `1044` | `create` | Remote debug port |
+| `JMX_PORT` | _(disabled)_ | `run` | Enable JMX monitoring on this port |
+| `DB_CONTAINER` | _(SDK-managed)_ | `create`, `destroy` | Connect to an existing Docker MySQL container |
+| `DB_HOST` | `localhost` | `create` | Database host (when `DB_CONTAINER` is set) |
+| `DB_PORT` | `3308` | `create` | Database port (when `DB_CONTAINER` is set) |
+| `DB_NAME` | server ID | `create`, `destroy` | Database name |
+| `DB_USER` | `root` | `create`, `destroy` | Database user |
+| `DB_PASSWORD` | `root` | `create`, `destroy` | Database password |
 
 **Example — run with JMX monitoring:**
 ```bash
-JMX_PORT=9000 ./sdk.sh botsabelo-demo run
+JMX_PORT=9000 ./sdk.sh run lesotho
 ```
 
 **Example — connect to an existing Docker MySQL container:**
 ```bash
-DB_CONTAINER=mysql56 DB_PORT=3306 ./sdk.sh botsabelo-demo create
-./sdk.sh botsabelo-demo run
+DB_CONTAINER=mysql56 DB_PORT=3306 ./sdk.sh create lesotho
+./sdk.sh run lesotho
 ```
 
 ### Seeded Environments

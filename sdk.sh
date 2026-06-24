@@ -1,8 +1,8 @@
 #!/bin/bash
 set -euo pipefail
 
-SITE=${1:-}
-COMMAND=${2:-}
+COMMAND="${1:-}"
+SERVER_ID="${SERVER_ID:-${2:-}}"
 
 SCRIPT_DIR="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
 
@@ -13,6 +13,9 @@ export MAVEN_OPTS="-Xms512m -Xmx2g"
 SERVER_PORT="${SERVER_PORT:-8080}"
 DEBUG_PORT="${DEBUG_PORT:-1044}"
 
+# PIH config passed to SDK setup — override to use a different config profile
+PIH_CONFIG="${PIH_CONFIG:-lesotho,lesotho-botsabelo-demo}"
+
 # DB connection settings — used when DB_CONTAINER is set
 DB_HOST="${DB_HOST:-localhost}"
 DB_PORT="${DB_PORT:-3308}"
@@ -20,19 +23,19 @@ DB_USER="${DB_USER:-root}"
 DB_PASSWORD="${DB_PASSWORD:-root}"
 
 usage() {
-    echo "Usage: $0 <site> <command>"
+    echo "Usage: $0 <command> [server-id]"
     echo ""
-    echo "Sites:    botsabelo-demo"
     echo "Commands: create | update | update-config | run | destroy"
     echo ""
-    echo "  create         Set up a new SDK server for the given site"
+    echo "  create         Set up a new SDK server"
     echo "  update         Redeploy updated artifacts to an existing server"
     echo "  update-config  Redeploy configuration only to an existing server"
     echo "  run            Start the server (use Ctrl+C to stop)"
     echo "  destroy        Delete the server directory and drop its database"
     echo ""
     echo "Environment variable overrides:"
-    echo "  SERVER_ID     Server ID (default: site name)"
+    echo "  SERVER_ID     Server ID (overrides positional argument)"
+    echo "  PIH_CONFIG    PIH config profile (default: lesotho,lesotho-botsabelo-demo)"
     echo "  SERVER_PORT   Tomcat port (default: 8080)"
     echo "  DEBUG_PORT    Remote debug port (default: 1044)"
     echo "  JMX_PORT      Enable JMX monitoring on this port (default: disabled)"
@@ -60,14 +63,8 @@ for arg in "${@:3}"; do
     esac
 done
 
-case "$SITE" in
-    botsabelo-demo)       PIH_CONFIG="lesotho,lesotho-botsabelo-demo" ;;
-    *) echo "Unknown site: '$SITE'"; echo ""; usage ;;
-esac
-
 [ -z "$COMMAND" ] && usage
-
-SERVER_ID="${SERVER_ID:-${SITE}}"
+[ -z "$SERVER_ID" ] && usage
 SERVER_DIR="$HOME/openmrs/${SERVER_ID}"  # used by destroy
 DB_NAME="${DB_NAME:-${SERVER_ID}}"
 DB_URI="jdbc:mysql://${DB_HOST}:${DB_PORT}/${DB_NAME}?autoReconnect=true&useUnicode=true&characterEncoding=UTF-8&sessionVariables=default_storage_engine%3DInnoDB"
@@ -108,7 +105,7 @@ case "$COMMAND" in
         # Check if the database already exists; if so, append the SDK's reset prompt answer to batchAnswers
         if [ -n "${MYSQL_CONTAINER:-}" ]; then
             _db_exists=$(docker exec "${MYSQL_CONTAINER}" mysql -u"${MYSQL_USER}" -p"${MYSQL_PASS}" \
-                -e "SHOW DATABASES LIKE '${DB_NAME}';" 2>/dev/null | grep -c "${DB_NAME}" || echo 0)
+                -e "SHOW DATABASES LIKE '${DB_NAME}';" 2>/dev/null | grep -c "${DB_NAME}" || true)
             if [ "${_db_exists}" -gt 0 ]; then
                 # Prompt asks "use existing data?"; "n" = reset, "y" = keep
                 BATCH_ANSWERS="${BATCH_ANSWERS},$( [ "$RESET_DB" = true ] && echo n || echo y )"
