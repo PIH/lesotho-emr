@@ -6,17 +6,6 @@ This module pulls together all component artifacts into a single deployable dist
 
 Component versions are defined as Maven properties in `pom.xml`. During the Maven build (`mvn clean install`), these properties are interpolated into `openmrs-distro.properties`, which is packaged into the artifact jar and written to `target/classes/openmrs-distro.properties`. This resolved file is what `sdk.sh` and `docker.sh` pass to the SDK and Docker build steps.
 
-## Components
-
-| Component | Maven property in `pom.xml` |
-|---|---|
-| PIH EMR parent distro | `parentVersion` |
-| PIH EMR shared content | `parentContentVersion` |
-| Lesotho content | `contentVersion` (tracks project version) |
-| PIH EMR frontend | `frontendVersion` |
-
-See `pom.xml` for current version values.
-
 ## Updating component versions
 
 To update a component version, change the corresponding property in `pom.xml` and rebuild:
