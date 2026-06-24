@@ -25,7 +25,7 @@ Reboot your computer.
 Open the Ubuntu terminal from your start menu and paste the following command:
 
 ```bash
-curl https://raw.githubusercontent.com/PIH/lesotho-emr/refs/heads/main/setup.sh | sudo bash
+curl https://raw.githubusercontent.com/PIH/lesotho-emr/refs/heads/main/docker/setup.sh | sudo bash
 ```
 
 When the process is complete, close the Ubuntu terminal window and relaunch it from the Start Menu.
