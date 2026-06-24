@@ -115,8 +115,8 @@ case "$COMMAND" in
         cd "$SCRIPT_DIR" && mvn clean package -U
         $BASE_COMPOSE build
         ;;
-    stop)    $SEED_COMPOSE down ;;
-    logs)    $SEED_COMPOSE logs -f ;;
-    destroy) $SEED_COMPOSE down -v ;;
+    stop)    $BASE_COMPOSE down --remove-orphans ;;
+    logs)    $BASE_COMPOSE logs -f ;;
+    destroy) $BASE_COMPOSE down -v --remove-orphans ;;
     *) echo "Unknown command: '$COMMAND'"; echo ""; usage ;;
 esac
