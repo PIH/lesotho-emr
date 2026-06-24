@@ -68,9 +68,19 @@ docker compose -f docker/compose.seed.yaml --env-file docker/default.env down -v
 
 ## Seeded environments
 
-> **Note:** Nightly seeded image builds are not yet configured for this repository.
+A nightly CI workflow builds and publishes pre-initialized seed images to Docker Hub for each site. A seeded image has OpenMRS fully initialized, so startup takes ~5 minutes instead of ~30 minutes. `docker.sh start` uses the seeded image by default; pass `--fresh` to initialize from scratch using `compose.yaml`.
 
-Once configured, nightly CI will publish pre-seeded images per site. A seeded image has OpenMRS fully initialized, so startup takes ~5 minutes instead of ~30 minutes. `docker.sh start` will use the seeded image by default; pass `--fresh` to initialize from scratch using `compose.yaml`.
+| Site | Image |
+|---|---|
+| `botsabelo-demo` | [`partnersinhealth/lesotho-emr-seed-botsabelo-demo`](https://hub.docker.com/r/partnersinhealth/lesotho-emr-seed-botsabelo-demo) |
+
+To pin to a specific version, set `SEED_IMAGE_TAG=<version>`. To wipe all volumes for a clean re-seed, pass `-v` to `down`:
+
+```bash
+SITE=botsabelo-demo \
+  PIH_CONFIG=lesotho,lesotho-botsabelo-demo \
+  docker compose -f docker/compose.seed.yaml --env-file docker/default.env down -v
+```
 
 ## Running on Windows
 

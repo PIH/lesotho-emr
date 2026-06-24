@@ -142,22 +142,21 @@ DB_CONTAINER=mysql56 DB_PORT=3306 ./sdk.sh botsabelo-demo create
 
 ### Seeded Environments
 
-> **Note:** Nightly seeded image builds are not yet configured for this repository. This section will be updated when CI is set up.
-
-Once configured, `docker.sh start` will use pre-seeded images by default for fast startup. For programmatic use, `docker/compose.seed.yaml` can be invoked directly:
-
-```bash
-SITE=botsabelo-demo \
-  PIH_CONFIG=lesotho,lesotho-botsabelo-demo \
-  docker compose -f docker/compose.seed.yaml --env-file docker/default.env up -d
-```
+`docker.sh start` uses a pre-seeded image by default for fast startup (~5 minutes). Pass `--fresh` to initialize from scratch (~30 minutes). See the [Seeded environments](docker/README.md#seeded-environments) section of the Docker setup guide for details.
 
 ## CI and Publishing
 
-> **Note:** GitHub Actions CI is not yet configured for this repository.
+CI is handled by GitHub Actions. On every push to `main`, the [Build and deploy](.github/workflows/build-and-deploy.yml) workflow:
 
-When CI is configured, it will handle:
-- Building and publishing the Maven artifact to Maven Central as `org.pih.openmrs:lesotho-distro`
-- Building and pushing a Docker image to Docker Hub at `partnersinhealth/lesotho-emr`
-- Nightly seeded image builds per site
-- Automated snapshot dependency updates
+1. Builds and publishes the Maven artifact to [Maven Central](https://central.sonatype.com/artifact/org.pih.openmrs/lesotho-distro) as `org.pih.openmrs:lesotho-distro`.
+2. Builds and pushes a multi-platform Docker image (amd64 + arm64) to Docker Hub at [`partnersinhealth/lesotho-emr`](https://hub.docker.com/r/partnersinhealth/lesotho-emr), tagged with both `latest` and the Maven project version.
+
+A separate [Build seeded images](.github/workflows/build-seeded-images.yml) workflow runs nightly and publishes pre-initialized seed images to Docker Hub:
+
+| Image | Tags |
+|---|---|
+| [`partnersinhealth/lesotho-emr-seed-botsabelo-demo`](https://hub.docker.com/r/partnersinhealth/lesotho-emr-seed-botsabelo-demo) | `latest`, version |
+
+See [Seeded environments](docker/README.md#seeded-environments) for usage.
+
+A separate [Update Versions](.github/workflows/update-versions.yml) workflow runs hourly and automatically commits any available snapshot dependency updates to `main`.
