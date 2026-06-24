@@ -16,7 +16,7 @@ Configuration files live under `configuration/backend_configuration/` and are lo
 | `idgen/` | Identifier source definitions |
 | `locations/` | Facility and location definitions |
 | `locationtagmaps/` | Maps locations to location tags |
-| `metadatermmappings/` | Maps concepts/metadata to standard terms |
+| `metadatatermmappings/` | Maps concepts/metadata to standard terms |
 | `patientidentifiertypes/` | Patient identifier type definitions |
 | `pih/` | PIH-specific configuration (radiology constants, etc.) |
 

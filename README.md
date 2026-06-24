@@ -45,7 +45,7 @@ Use `docker.sh` to run a site locally using Docker Compose.
 |---|---|
 | `start` | Start the stack |
 | `wait` | Wait for OpenMRS to finish initializing |
-| `update` | Restart the stack, pulling the latest image |
+| `update` | Stop and restart the stack |
 | `build` | Build the distribution from source and create a local Docker image |
 | `stop` | Stop the running stack |
 | `logs` | Tail container logs |
