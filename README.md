@@ -29,7 +29,7 @@ Component versions are defined in `distro/pom.xml` and resolved into `distro/ope
 
 ## Running on Windows
 
-For step-by-step instructions to run a local environment on Windows using Docker Desktop, see [docker/WINDOWS.md](docker/WINDOWS.md).
+For step-by-step instructions to run a local environment on Windows, see the [Running on Windows](docker/README.md#running-on-windows) section of the Docker setup guide.
 
 ## Developer Guide
 
