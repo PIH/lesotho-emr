@@ -36,7 +36,6 @@ All variables are defined in `default.env` and can be overridden with shell envi
 | `MYSQL_PORT` | `3306` | Port MySQL is exposed on (override only) |
 | `TOMCAT_DEBUG_PORT` | `1044` | Tomcat remote debug port (override only) |
 | `PIH_CONFIG` | `lesotho,lesotho-botsabelo-demo` | PIH configuration profile |
-| `DBEVENT_ENABLED` | `false` | Enable DB event module |
 | `ACTIVITYLOG_ENABLED` | `false` | Enable activity log module |
 | `DB_MEMORY_LIMIT` | `2g` | Docker memory limit for the database container |
 | `OPENMRS_MEMORY_LIMIT` | `4g` | Docker memory limit for the OpenMRS container |
