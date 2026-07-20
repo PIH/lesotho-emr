@@ -10,14 +10,22 @@ For most use cases, use [`docker.sh`](../docker.sh) from the repository root rat
 |---|---|
 | `compose.yaml` | Main stack: `db` (MySQL 5.6) + `openmrs` |
 | `compose.seed.yaml` | Uses a pre-seeded Docker image for fast startup |
-| `compose.override.yaml` | Exposes MySQL and Tomcat debug ports (opt-in) |
+| `compose.dev.yaml` | Developer overlay for either stack above (opt-in): exposes debug ports and mounts a locally-built distro over the image |
 
 `compose.yaml` builds the OpenMRS image from `distro/target/distro/web`, which requires a prior `mvn clean package`. The `--build` option in `docker.sh` handles this automatically.
 
-To expose the database and Tomcat debug ports, edit `default.env`:
+To develop against either stack with debug ports exposed and your local build mounted in place of the image's baked-in distro:
 
+```bash
+./docker.sh botsabelo-demo start --dev --build
 ```
-COMPOSE_FILE=compose.yaml:compose.override.yaml
+
+`--build` runs `mvn clean package` first; drop it to reuse a distro you already built. `--dev` mounts `../distro/target/distro/web` into the container at `/openmrs/distribution` (overriding the image's baked-in distribution) and exposes the MySQL and Tomcat debug ports. It works with both `compose.seed.yaml` (overriding the published image's distro) and `compose.yaml --fresh` (skipping the need to rebuild the image on every change).
+
+To use it without `docker.sh`, pass both compose files directly:
+
+```bash
+docker compose -f compose.seed.yaml -f compose.dev.yaml --env-file default.env up -d
 ```
 
 ## Environment variables

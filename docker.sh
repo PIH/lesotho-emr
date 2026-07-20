@@ -8,6 +8,7 @@ shift 2 2>/dev/null || true
 SCRIPT_DIR="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
 COMPOSE_FILE="$SCRIPT_DIR/docker/compose.yaml"
 SEED_COMPOSE_FILE="$SCRIPT_DIR/docker/compose.seed.yaml"
+DEV_COMPOSE_FILE="$SCRIPT_DIR/docker/compose.dev.yaml"
 ENV_FILE="$SCRIPT_DIR/docker/default.env"
 
 usage() {
@@ -27,6 +28,8 @@ usage() {
     echo "Options:"
     echo "  --build   Build the distribution from source before start/update"
     echo "  --fresh   Start from scratch instead of using a pre-seeded image"
+    echo "  --dev     Expose debug ports and mount the locally-built distro over"
+    echo "            whatever's in the image (combine with --build to build it first)"
     echo ""
     echo "Environment variable overrides:"
     echo "  TOMCAT_HTTP_PORT   Port OpenMRS is exposed on (default: 8080)"
@@ -35,10 +38,12 @@ usage() {
 
 BUILD=false
 FRESH=false
+DEV=false
 for arg in "$@"; do
     case "$arg" in
         --build) BUILD=true ;;
         --fresh) FRESH=true ;;
+        --dev) DEV=true ;;
         *) echo "Unknown option: '$arg'"; echo ""; usage ;;
     esac
 done
@@ -56,11 +61,17 @@ export SITE
 
 BASE_COMPOSE="docker compose -f $COMPOSE_FILE --env-file $ENV_FILE"
 SEED_COMPOSE="docker compose -f $SEED_COMPOSE_FILE --env-file $ENV_FILE"
+if $DEV; then
+    BASE_COMPOSE="$BASE_COMPOSE -f $DEV_COMPOSE_FILE"
+    SEED_COMPOSE="$SEED_COMPOSE -f $DEV_COMPOSE_FILE"
+fi
 
 build_image() {
     cd "$SCRIPT_DIR" && mvn clean package -U
-    if ! $FRESH; then
-        # compose.seed.yaml has no build context; build the image explicitly
+    if ! $FRESH && ! $DEV; then
+        # compose.seed.yaml has no build context; build the image explicitly.
+        # Skipped with --dev, since that mounts the build output directly
+        # instead of requiring a rebuilt image.
         $BASE_COMPOSE build
     fi
 }
