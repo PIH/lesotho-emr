@@ -7,6 +7,8 @@ on:
 
 env:
   SEED_IMAGE_PREFIX: partnersinhealth/lesotho-emr-seed
+  IMAGE_NAME: partnersinhealth/lesotho-emr
+  TOOLS_VERSION: v0.1.0
 
 concurrency:
   group: build-seeded-images-${{ github.ref }}
@@ -21,11 +23,20 @@ jobs:
     strategy:
       matrix:
         site: [botsabelo-demo]
-    env:
-      SERVICE_NAME: ${{ matrix.site }}
+        include:
+          - site: botsabelo-demo
+            pih_config: lesotho,lesotho-botsabelo-demo
 
     steps:
-      - uses: actions/checkout@v4
+      - name: Check out lesotho-emr
+        uses: actions/checkout@v4
+
+      - name: Check out openmrs-contrib-distro-tools
+        uses: actions/checkout@v4
+        with:
+          repository: PIH/openmrs-contrib-distro-tools
+          ref: ${{ env.TOOLS_VERSION }}
+          path: .openmrs-contrib-distro-tools
 
       - name: Set up JDK
         uses: actions/setup-java@v4
@@ -43,20 +54,26 @@ jobs:
           username: pihci
           password: ${{ secrets.DOCKERHUB_PASSWORD }}
 
-      - name: Start stack
+      - name: Create instance
         env:
+          DISTRO_SOURCE_DIR: ${{ github.workspace }}
+          SEED_IMAGE_NAME: ${{ env.SEED_IMAGE_PREFIX }}-${{ matrix.site }}
+          PIH_CONFIG: ${{ matrix.pih_config }}
           OPENMRS_IMAGE_TAG: ${{ env.VERSION }}
-        run: ./docker.sh ${{ matrix.site }} start --fresh
+        run: .openmrs-contrib-distro-tools/docker.sh create ${{ matrix.site }}
+
+      - name: Start stack
+        run: .openmrs-contrib-distro-tools/docker.sh ${{ matrix.site }} start --fresh --build
 
       - name: Wait for OpenMRS to be fully initialized
-        run: ./docker.sh ${{ matrix.site }} wait
+        run: .openmrs-contrib-distro-tools/docker.sh ${{ matrix.site }} wait
 
       - name: Stop OpenMRS
-        run: docker compose -f docker/compose.yaml stop openmrs
+        run: docker compose --env-file "$HOME/openmrs/${{ matrix.site }}/env" -f .openmrs-contrib-distro-tools/docker/compose.yaml stop openmrs
 
       - name: Export database
         run: |
-          DB_CONTAINER=$(docker compose -f docker/compose.yaml ps -q db)
+          DB_CONTAINER=$(docker compose --env-file "$HOME/openmrs/${{ matrix.site }}/env" -f .openmrs-contrib-distro-tools/docker/compose.yaml ps -q db)
           docker exec "$DB_CONTAINER" \
             sh -c 'mysqldump -u root -p"$MYSQL_ROOT_PASSWORD" --databases openmrs' \
             | gzip > dump.sql.gz
@@ -64,7 +81,7 @@ jobs:
 
       - name: Export openmrs-data volume
         run: |
-          OPENMRS_CONTAINER=$(docker compose -f docker/compose.yaml ps -q --all openmrs)
+          OPENMRS_CONTAINER=$(docker compose --env-file "$HOME/openmrs/${{ matrix.site }}/env" -f .openmrs-contrib-distro-tools/docker/compose.yaml ps -q --all openmrs)
           DATA_VOLUME=$(docker inspect "$OPENMRS_CONTAINER" \
             --format '{{range .Mounts}}{{if eq .Destination "/openmrs/data"}}{{.Name}}{{end}}{{end}}')
           echo "Exporting volume: $DATA_VOLUME"
@@ -73,16 +90,16 @@ jobs:
             alpine sh -c 'cd /data && tar czf - .' > data.tar.gz
           echo "data.tar.gz size: $(du -sh data.tar.gz | cut -f1)"
 
-      - name: Stop stack
+      - name: Destroy instance
         if: always()
-        run: ./docker.sh ${{ matrix.site }} destroy
+        run: .openmrs-contrib-distro-tools/docker.sh ${{ matrix.site }} destroy --force
 
       - name: Build seed image
         run: |
           mkdir -p .seed-build-context
-          cp dump.sql.gz data.tar.gz docker/seed-entrypoint.sh .seed-build-context/
+          cp dump.sql.gz data.tar.gz .openmrs-contrib-distro-tools/docker/seed-entrypoint.sh .seed-build-context/
           docker build \
-            -f docker/Dockerfile.seed \
+            -f .openmrs-contrib-distro-tools/docker/Dockerfile.seed \
             -t ${{ env.SEED_IMAGE_PREFIX }}-${{ matrix.site }}:${{ env.VERSION }} \
             -t ${{ env.SEED_IMAGE_PREFIX }}-${{ matrix.site }}:latest \
             .seed-build-context/
