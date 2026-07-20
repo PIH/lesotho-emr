@@ -33,12 +33,26 @@ For step-by-step instructions to run a local environment on Windows, see the [Ru
 
 ## Developer Guide
 
+Local development runs through the shared
+[`openmrs-contrib-distro-tools`](https://github.com/PIH/openmrs-contrib-distro-tools) CLI
+(`docker.sh`/`sdk.sh`), installed once per machine rather than embedded in this repo. See
+[`docker/README.md`](docker/README.md) for the full quick start, environment variable reference,
+and Windows walkthrough.
+
 ### Docker (`docker.sh`)
 
-Use `docker.sh` to run a site locally using Docker Compose.
+Create a `botsabelo-demo` instance pointing at this repo, then run day-to-day commands by instance
+name:
 
-```
-./docker.sh <site> <command> [options]
+```bash
+IMAGE_NAME=partnersinhealth/lesotho-emr \
+  SEED_IMAGE_NAME=partnersinhealth/lesotho-emr-seed-botsabelo-demo \
+  PIH_CONFIG=lesotho,lesotho-botsabelo-demo \
+  DISTRO_SOURCE_DIR="$(pwd)" \
+  ~/openmrs-contrib-distro-tools/docker.sh create botsabelo-demo
+
+~/openmrs-contrib-distro-tools/docker.sh botsabelo-demo start
+~/openmrs-contrib-distro-tools/docker.sh botsabelo-demo wait
 ```
 
 | Command | Description |
@@ -47,48 +61,43 @@ Use `docker.sh` to run a site locally using Docker Compose.
 | `wait` | Wait for OpenMRS to finish initializing |
 | `update` | Stop and restart the stack |
 | `build` | Build the distribution from source and create a local Docker image |
+| `pull` | Pull the images this instance would use, without starting anything |
 | `stop` | Stop the running stack |
 | `logs` | Tail container logs |
-| `destroy` | Stop the stack and delete all volumes (wipes database) |
+| `destroy` | Stop the stack, delete all volumes, and remove the instance directory |
 
 | Option | Description |
 |---|---|
 | `--build` | Build the distribution from source before starting |
 | `--fresh` | Initialize OpenMRS from scratch instead of using a pre-seeded image |
+| `--dev` | Expose debug ports and mount a locally-built distro over the image |
+| `--force` | Skip the confirmation prompt (`destroy` only) |
 
-By default, `start` uses a pre-seeded image for fast startup (~5 minutes). Pass `--fresh` to initialize from scratch (~30 minutes).
-
-**Example — start with pre-seeded image (default):**
-```bash
-./docker.sh botsabelo-demo start
-```
-
-**Example — wait for OpenMRS to be ready:**
-```bash
-./docker.sh botsabelo-demo wait
-```
+By default, `start` uses a pre-seeded image for fast startup (~5 minutes). Pass `--fresh` to
+initialize from scratch (~30 minutes).
 
 **Example — build from source and start:**
 ```bash
-./docker.sh botsabelo-demo start --build
+~/openmrs-contrib-distro-tools/docker.sh botsabelo-demo start --build
 ```
 
-**Example — run on a different port:**
-```bash
-TOMCAT_HTTP_PORT=9090 ./docker.sh botsabelo-demo start
-```
+**Example — run on a different port:** edit `TOMCAT_HTTP_PORT` in the instance's own env file
+(`~/openmrs/botsabelo-demo/env`) rather than passing it on the command line — `docker.sh` sources
+that file directly, so a value already set there always wins over a same-named shell override.
 
-See [`docker/README.md`](docker/README.md) for the full Docker Compose reference including all environment variables.
+See [`docker/README.md`](docker/README.md) for the full instance `env` file reference.
 
 ### OpenMRS SDK (`sdk.sh`)
 
 Use `sdk.sh` to run a site using the [OpenMRS SDK](https://wiki.openmrs.org/display/docs/OpenMRS+SDK), which sets up a local Tomcat server with its own MySQL instance.
 
 ```
-./sdk.sh <command> <server-id>
+~/openmrs-contrib-distro-tools/sdk.sh <command> <server-id>
 ```
 
-The server ID is a local name of your choosing — it controls the server directory (`~/openmrs/<server-id>`) and defaults the database name. Examples below use `lesotho` but you can use anything.
+The server ID is a local name of your choosing — it controls the server directory
+(`~/openmrs/<server-id>`) and defaults the database name. Examples below use `lesotho` but you can
+use anything.
 
 | Command | Description |
 |---|---|
@@ -100,20 +109,21 @@ The server ID is a local name of your choosing — it controls the server direct
 
 **Example — first-time setup:**
 ```bash
-./sdk.sh create lesotho
-./sdk.sh run lesotho
+DISTRO_SOURCE_DIR="$(pwd)" PIH_CONFIG=lesotho,lesotho-botsabelo-demo \
+  ~/openmrs-contrib-distro-tools/sdk.sh create lesotho
+~/openmrs-contrib-distro-tools/sdk.sh run lesotho
 ```
 
 **Example — after updating component versions:**
 ```bash
-./sdk.sh update lesotho
-./sdk.sh run lesotho
+DISTRO_SOURCE_DIR="$(pwd)" ~/openmrs-contrib-distro-tools/sdk.sh update lesotho
+~/openmrs-contrib-distro-tools/sdk.sh run lesotho
 ```
 
 **Example — redeploy configuration only:**
 ```bash
-./sdk.sh update-config lesotho
-./sdk.sh run lesotho
+DISTRO_SOURCE_DIR="$(pwd)" ~/openmrs-contrib-distro-tools/sdk.sh update-config lesotho
+~/openmrs-contrib-distro-tools/sdk.sh run lesotho
 ```
 
 #### Environment variable overrides
@@ -121,7 +131,8 @@ The server ID is a local name of your choosing — it controls the server direct
 | Variable | Default | Commands | Description |
 |---|---|---|---|
 | `SERVER_ID` | positional arg | all | SDK server directory name |
-| `PIH_CONFIG` | `lesotho,lesotho-botsabelo-demo` | `create` | PIH config profile passed to SDK setup |
+| `DISTRO_SOURCE_DIR` | current directory | all | Path to this repo's checkout |
+| `PIH_CONFIG` | _(required)_ | `create` | PIH config profile passed to SDK setup — e.g. `lesotho,lesotho-botsabelo-demo` |
 | `SERVER_PORT` | `8080` | `create` | Tomcat HTTP port |
 | `DEBUG_PORT` | `1044` | `create` | Remote debug port |
 | `JMX_PORT` | _(disabled)_ | `run` | Enable JMX monitoring on this port |
@@ -134,13 +145,14 @@ The server ID is a local name of your choosing — it controls the server direct
 
 **Example — run with JMX monitoring:**
 ```bash
-JMX_PORT=9000 ./sdk.sh run lesotho
+JMX_PORT=9000 ~/openmrs-contrib-distro-tools/sdk.sh run lesotho
 ```
 
 **Example — connect to an existing Docker MySQL container:**
 ```bash
-DB_CONTAINER=mysql56 DB_PORT=3306 ./sdk.sh create lesotho
-./sdk.sh run lesotho
+DISTRO_SOURCE_DIR="$(pwd)" DB_CONTAINER=mysql56 DB_PORT=3306 PIH_CONFIG=lesotho,lesotho-botsabelo-demo \
+  ~/openmrs-contrib-distro-tools/sdk.sh create lesotho
+~/openmrs-contrib-distro-tools/sdk.sh run lesotho
 ```
 
 ### Seeded Environments
