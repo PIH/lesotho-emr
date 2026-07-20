@@ -6,8 +6,10 @@ machine — see that repo's README for the full instance model and `docker.sh`/`
 
 ## Quick start
 
-Clone `openmrs-contrib-distro-tools` and (optionally) add it to `PATH`, then create a `botsabelo-demo`
-instance pointing at this repo:
+Clone `openmrs-contrib-distro-tools` and create a `botsabelo-demo` instance pointing at this repo.
+The commands below use the full path to the clone; if you add it to `PATH` instead (as the Windows
+setup script below does automatically), drop the `~/openmrs-contrib-distro-tools/` prefix and just
+run `docker.sh`/`sdk.sh` directly.
 
 ```bash
 git clone --branch v0.1.0 https://github.com/PIH/openmrs-contrib-distro-tools.git ~/openmrs-contrib-distro-tools
