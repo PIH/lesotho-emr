@@ -30,35 +30,31 @@ Component versions are defined in `distro/pom.xml` and resolved into `distro/ope
 
 Local development runs through the shared
 [`openmrs-contrib-distro-tools`](https://github.com/PIH/openmrs-contrib-distro-tools) CLI
-(`openmrs-docker`/`openmrs-sdk`), installed once per machine rather than embedded in this repo. See
-that repo's [Install](https://github.com/PIH/openmrs-contrib-distro-tools#install) section to put it
-on `PATH` — once it is, drop the `~/openmrs-contrib-distro-tools/` prefix from every command below,
-as the Windows section further down does.
+(`openmrs-docker`/`openmrs-sdk`), installed once per machine rather than embedded in this repo.
+Follow that repo's [Install](https://github.com/PIH/openmrs-contrib-distro-tools#install) section
+first — the commands below assume `openmrs-docker`/`openmrs-sdk` are already on your `PATH`.
 
 ### Docker (`openmrs-docker`)
 
-Clone `openmrs-contrib-distro-tools` (once per machine), then create a `botsabelo-demo` instance
-pointing at this repo:
+Create a `botsabelo-demo` instance pointing at this repo:
 
 ```bash
-git clone https://github.com/PIH/openmrs-contrib-distro-tools.git ~/openmrs-contrib-distro-tools
-
 IMAGE_NAME=partnersinhealth/lesotho-emr \
   SEED_IMAGE_NAME=partnersinhealth/lesotho-emr-seed-botsabelo-demo \
   PIH_CONFIG=lesotho,lesotho-botsabelo-demo \
   DISTRO_SOURCE_DIR="$(pwd)" \
-  ~/openmrs-contrib-distro-tools/openmrs-docker create botsabelo-demo
+  openmrs-docker create botsabelo-demo
 
-~/openmrs-contrib-distro-tools/openmrs-docker botsabelo-demo start
-~/openmrs-contrib-distro-tools/openmrs-docker botsabelo-demo wait
+openmrs-docker botsabelo-demo start
+openmrs-docker botsabelo-demo wait
 ```
 
 Once created, day-to-day commands only need the instance name:
 
 ```bash
-~/openmrs-contrib-distro-tools/openmrs-docker botsabelo-demo stop
-~/openmrs-contrib-distro-tools/openmrs-docker botsabelo-demo logs
-~/openmrs-contrib-distro-tools/openmrs-docker botsabelo-demo destroy
+openmrs-docker botsabelo-demo stop
+openmrs-docker botsabelo-demo logs
+openmrs-docker botsabelo-demo destroy
 ```
 
 | Command | Description |
@@ -84,12 +80,12 @@ initialize from scratch (~30 minutes).
 
 **Example — build from source and start:**
 ```bash
-~/openmrs-contrib-distro-tools/openmrs-docker botsabelo-demo start --build
+openmrs-docker botsabelo-demo start --build
 ```
 
 **Example — develop against a locally-built distro with debug ports exposed:**
 ```bash
-~/openmrs-contrib-distro-tools/openmrs-docker botsabelo-demo start --dev --build
+openmrs-docker botsabelo-demo start --dev --build
 ```
 
 **Example — run on a different port:** edit `TOMCAT_HTTP_PORT` in the instance's own env file
@@ -104,7 +100,7 @@ for the full instance `env` file reference.
 Use `openmrs-sdk` to run a site using the [OpenMRS SDK](https://wiki.openmrs.org/display/docs/OpenMRS+SDK), which sets up a local Tomcat server with its own MySQL instance.
 
 ```
-~/openmrs-contrib-distro-tools/openmrs-sdk <command> <server-id>
+openmrs-sdk <command> <server-id>
 ```
 
 The server ID is a local name of your choosing — it controls the server directory
@@ -122,20 +118,20 @@ use anything.
 **Example — first-time setup:**
 ```bash
 DISTRO_SOURCE_DIR="$(pwd)" PIH_CONFIG=lesotho,lesotho-botsabelo-demo \
-  ~/openmrs-contrib-distro-tools/openmrs-sdk create lesotho
-~/openmrs-contrib-distro-tools/openmrs-sdk run lesotho
+  openmrs-sdk create lesotho
+openmrs-sdk run lesotho
 ```
 
 **Example — after updating component versions:**
 ```bash
-DISTRO_SOURCE_DIR="$(pwd)" ~/openmrs-contrib-distro-tools/openmrs-sdk update lesotho
-~/openmrs-contrib-distro-tools/openmrs-sdk run lesotho
+DISTRO_SOURCE_DIR="$(pwd)" openmrs-sdk update lesotho
+openmrs-sdk run lesotho
 ```
 
 **Example — redeploy configuration only:**
 ```bash
-DISTRO_SOURCE_DIR="$(pwd)" ~/openmrs-contrib-distro-tools/openmrs-sdk update-config lesotho
-~/openmrs-contrib-distro-tools/openmrs-sdk run lesotho
+DISTRO_SOURCE_DIR="$(pwd)" openmrs-sdk update-config lesotho
+openmrs-sdk run lesotho
 ```
 
 #### Environment variable overrides
@@ -157,14 +153,14 @@ DISTRO_SOURCE_DIR="$(pwd)" ~/openmrs-contrib-distro-tools/openmrs-sdk update-con
 
 **Example — run with JMX monitoring:**
 ```bash
-JMX_PORT=9000 ~/openmrs-contrib-distro-tools/openmrs-sdk run lesotho
+JMX_PORT=9000 openmrs-sdk run lesotho
 ```
 
 **Example — connect to an existing Docker MySQL container:**
 ```bash
 DISTRO_SOURCE_DIR="$(pwd)" DB_CONTAINER=mysql56 DB_PORT=3306 PIH_CONFIG=lesotho,lesotho-botsabelo-demo \
-  ~/openmrs-contrib-distro-tools/openmrs-sdk create lesotho
-~/openmrs-contrib-distro-tools/openmrs-sdk run lesotho
+  openmrs-sdk create lesotho
+openmrs-sdk run lesotho
 ```
 
 ### Seeded Environments
