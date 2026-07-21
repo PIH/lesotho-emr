@@ -5,107 +5,15 @@ on:
     - cron: '0 2 * * *'
   workflow_dispatch:
 
-env:
-  SEED_IMAGE_PREFIX: partnersinhealth/lesotho-emr-seed
-  IMAGE_NAME: partnersinhealth/lesotho-emr
-
-concurrency:
-  group: build-seeded-images-${{ github.ref }}
-  cancel-in-progress: true
-
 jobs:
-  build-seed:
-    name: Build seed image (${{ matrix.site }})
+  botsabelo-demo:
     if: github.repository_owner == 'PIH'
-    runs-on: ubuntu-latest
-    timeout-minutes: 80
-    strategy:
-      matrix:
-        site: [botsabelo-demo]
-        include:
-          - site: botsabelo-demo
-            pih_config: lesotho,lesotho-botsabelo-demo
-
-    steps:
-      - name: Check out lesotho-emr
-        uses: actions/checkout@v4
-
-      - name: Check out openmrs-contrib-distro-tools
-        uses: actions/checkout@v4
-        with:
-          repository: PIH/openmrs-contrib-distro-tools
-          path: .openmrs-contrib-distro-tools
-
-      - name: Set up JDK
-        uses: actions/setup-java@v4
-        with:
-          distribution: 'temurin'
-          java-version: 8
-          cache: 'maven'
-
-      - name: Extract pom version
-        run: echo "VERSION=$(mvn help:evaluate -Dexpression=project.version -q -DforceStdout)" >> $GITHUB_ENV
-
-      - name: Login to Docker Hub
-        uses: docker/login-action@v3
-        with:
-          username: pihci
-          password: ${{ secrets.DOCKERHUB_PASSWORD }}
-
-      - name: Create instance
-        env:
-          DISTRO_SOURCE_DIR: ${{ github.workspace }}
-          SEED_IMAGE_NAME: ${{ env.SEED_IMAGE_PREFIX }}-${{ matrix.site }}
-          PIH_CONFIG: ${{ matrix.pih_config }}
-        run: .openmrs-contrib-distro-tools/docker.sh create ${{ matrix.site }}
-
-      - name: Start stack
-        run: .openmrs-contrib-distro-tools/docker.sh ${{ matrix.site }} start --fresh --build
-
-      - name: Wait for OpenMRS to be fully initialized
-        run: .openmrs-contrib-distro-tools/docker.sh ${{ matrix.site }} wait
-
-      - name: Stop OpenMRS
-        run: docker compose --env-file "$HOME/openmrs/${{ matrix.site }}/env" -f .openmrs-contrib-distro-tools/docker/compose.yaml stop openmrs
-
-      - name: Export database
-        run: |
-          DB_CONTAINER=$(docker compose --env-file "$HOME/openmrs/${{ matrix.site }}/env" -f .openmrs-contrib-distro-tools/docker/compose.yaml ps -q db)
-          docker exec "$DB_CONTAINER" \
-            sh -c 'mysqldump -u root -p"$MYSQL_ROOT_PASSWORD" --databases openmrs' \
-            | gzip > dump.sql.gz
-          echo "dump.sql.gz size: $(du -sh dump.sql.gz | cut -f1)"
-
-      - name: Export openmrs-data volume
-        run: |
-          OPENMRS_CONTAINER=$(docker compose --env-file "$HOME/openmrs/${{ matrix.site }}/env" -f .openmrs-contrib-distro-tools/docker/compose.yaml ps -q --all openmrs)
-          DATA_VOLUME=$(docker inspect "$OPENMRS_CONTAINER" \
-            --format '{{range .Mounts}}{{if eq .Destination "/openmrs/data"}}{{.Name}}{{end}}{{end}}')
-          echo "Exporting volume: $DATA_VOLUME"
-          docker run --rm \
-            -v "${DATA_VOLUME}:/data" \
-            alpine sh -c 'cd /data && tar czf - .' > data.tar.gz
-          echo "data.tar.gz size: $(du -sh data.tar.gz | cut -f1)"
-
-      - name: Destroy instance
-        if: always()
-        run: .openmrs-contrib-distro-tools/docker.sh ${{ matrix.site }} destroy --force
-
-      - name: Build seed image
-        run: |
-          mkdir -p .seed-build-context
-          cp dump.sql.gz data.tar.gz .openmrs-contrib-distro-tools/docker/seed-entrypoint.sh .seed-build-context/
-          docker build \
-            -f .openmrs-contrib-distro-tools/docker/Dockerfile.seed \
-            -t ${{ env.SEED_IMAGE_PREFIX }}-${{ matrix.site }}:${{ env.VERSION }} \
-            -t ${{ env.SEED_IMAGE_PREFIX }}-${{ matrix.site }}:latest \
-            .seed-build-context/
-
-      - name: Push seed image
-        run: |
-          docker push ${{ env.SEED_IMAGE_PREFIX }}-${{ matrix.site }}:${{ env.VERSION }}
-          docker push ${{ env.SEED_IMAGE_PREFIX }}-${{ matrix.site }}:latest
-
-      - name: Clean up
-        if: always()
-        run: rm -rf dump.sql.gz data.tar.gz .seed-build-context
+    concurrency:
+      group: build-seeded-images-botsabelo-demo-${{ github.ref }}
+      cancel-in-progress: true
+    uses: PIH/openmrs-contrib-distro-tools/.github/workflows/build-seeded-image.yml@main
+    with:
+      image_name: partnersinhealth/lesotho-emr
+      site: botsabelo-demo
+      pih_config: lesotho,lesotho-botsabelo-demo
+    secrets: inherit
