@@ -117,20 +117,19 @@ use anything.
 
 **Example — first-time setup:**
 ```bash
-DISTRO_SOURCE_DIR="$(pwd)" PIH_CONFIG=lesotho,lesotho-botsabelo-demo \
-  openmrs-sdk create lesotho
+PIH_CONFIG=lesotho,lesotho-botsabelo-demo openmrs-sdk create lesotho
 openmrs-sdk run lesotho
 ```
 
 **Example — after updating component versions:**
 ```bash
-DISTRO_SOURCE_DIR="$(pwd)" openmrs-sdk update lesotho
+openmrs-sdk update lesotho
 openmrs-sdk run lesotho
 ```
 
 **Example — redeploy configuration only:**
 ```bash
-DISTRO_SOURCE_DIR="$(pwd)" openmrs-sdk update-config lesotho
+openmrs-sdk update-config lesotho
 openmrs-sdk run lesotho
 ```
 
@@ -158,7 +157,7 @@ JMX_PORT=9000 openmrs-sdk run lesotho
 
 **Example — connect to an existing Docker MySQL container:**
 ```bash
-DISTRO_SOURCE_DIR="$(pwd)" DB_CONTAINER=mysql56 DB_PORT=3306 PIH_CONFIG=lesotho,lesotho-botsabelo-demo \
+DB_CONTAINER=mysql56 DB_PORT=3306 PIH_CONFIG=lesotho,lesotho-botsabelo-demo \
   openmrs-sdk create lesotho
 openmrs-sdk run lesotho
 ```
