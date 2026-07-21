@@ -12,7 +12,7 @@ setup script below does automatically), drop the `~/openmrs-contrib-distro-tools
 run `docker.sh`/`sdk.sh` directly.
 
 ```bash
-git clone --branch v0.1.0 https://github.com/PIH/openmrs-contrib-distro-tools.git ~/openmrs-contrib-distro-tools
+git clone https://github.com/PIH/openmrs-contrib-distro-tools.git ~/openmrs-contrib-distro-tools
 
 IMAGE_NAME=partnersinhealth/lesotho-emr \
   SEED_IMAGE_NAME=partnersinhealth/lesotho-emr-seed-botsabelo-demo \
@@ -85,7 +85,7 @@ Reboot your computer.
 Open the Ubuntu terminal from your start menu and paste the following command:
 
 ```bash
-curl -fsSL https://raw.githubusercontent.com/PIH/openmrs-contrib-distro-tools/v0.1.0/docker/setup.sh | sudo bash
+curl -fsSL https://raw.githubusercontent.com/PIH/openmrs-contrib-distro-tools/main/docker/setup.sh | sudo bash
 ```
 
 When the process is complete, close the Ubuntu terminal window and relaunch it from the Start Menu.
@@ -137,7 +137,7 @@ docker.sh botsabelo-demo destroy
 ### Keeping the tool up to date
 
 ```bash
-cd ~/openmrs-contrib-distro-tools && git fetch --tags && git checkout <new-version-tag>
+cd ~/openmrs-contrib-distro-tools && git pull
 ```
 
 ### Troubleshooting
