@@ -35,7 +35,9 @@ Local development runs through the shared
 ### Docker (`docker.sh`)
 
 Clone `openmrs-contrib-distro-tools` (once per machine), then create a `botsabelo-demo` instance
-pointing at this repo:
+pointing at this repo. The commands below use the full path to the clone; if you add it to `PATH`
+instead (as the Windows setup script does automatically), drop the `~/openmrs-contrib-distro-tools/`
+prefix and just run `docker.sh`/`sdk.sh` directly, as the Windows section below does.
 
 ```bash
 git clone https://github.com/PIH/openmrs-contrib-distro-tools.git ~/openmrs-contrib-distro-tools
