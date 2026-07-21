@@ -145,7 +145,7 @@ openmrs-sdk run lesotho
 | `JMX_PORT` | _(disabled)_ | `run` | Enable JMX monitoring on this port |
 | `DB_CONTAINER` | _(SDK-managed)_ | `create`, `destroy` | Connect to an existing Docker MySQL container |
 | `DB_HOST` | `localhost` | `create` | Database host (when `DB_CONTAINER` is set) |
-| `DB_PORT` | `3308` | `create` | Database port (when `DB_CONTAINER` is set) |
+| `DB_PORT` | `3306` | `create` | Database port (when `DB_CONTAINER` is set) |
 | `DB_NAME` | server ID | `create`, `destroy` | Database name |
 | `DB_USER` | `root` | `create`, `destroy` | Database user |
 | `DB_PASSWORD` | `root` | `create`, `destroy` | Database password |
@@ -157,7 +157,7 @@ JMX_PORT=9000 openmrs-sdk run lesotho
 
 **Example — connect to an existing Docker MySQL container:**
 ```bash
-DB_CONTAINER=mysql56 DB_PORT=3306 PIH_CONFIG=lesotho,lesotho-botsabelo-demo \
+DB_CONTAINER=mysql56 DB_PORT=3308 PIH_CONFIG=lesotho,lesotho-botsabelo-demo \
   openmrs-sdk create lesotho
 openmrs-sdk run lesotho
 ```
