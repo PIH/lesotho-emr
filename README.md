@@ -202,7 +202,7 @@ Reboot your computer.
 Open the Ubuntu terminal from your start menu and paste the following command:
 
 ```bash
-curl -fsSL https://raw.githubusercontent.com/PIH/openmrs-contrib-distro-tools/main/docker/setup.sh | sudo bash
+curl -fsSL https://raw.githubusercontent.com/PIH/openmrs-contrib-distro-tools/main/docker/setup.sh | bash
 ```
 
 When the process is complete, close the Ubuntu terminal window and relaunch it from the Start Menu.
