@@ -4,7 +4,7 @@ This module pulls together all component artifacts into a single deployable dist
 
 ## How it works
 
-Component versions are defined as Maven properties in `pom.xml`. During the Maven build (`mvn clean install`), these properties are interpolated into `openmrs-distro.properties`, which is packaged into the artifact jar and written to `target/classes/openmrs-distro.properties`. This resolved file is what `sdk.sh` and `docker.sh` pass to the SDK and Docker build steps.
+Component versions are defined as Maven properties in `pom.xml`. During the Maven build (`mvn clean install`), these properties are interpolated into `openmrs-distro.properties`, which is packaged into the artifact jar and written to `target/classes/openmrs-distro.properties`. This resolved file is what `openmrs-sdk` and `openmrs-docker` pass to the SDK and Docker build steps.
 
 ## Updating component versions
 
@@ -14,7 +14,7 @@ To update a component version, change the corresponding property in `pom.xml` an
 mvn clean install
 ```
 
-Then use `sdk.sh update` or `docker.sh start --build` to redeploy with the new versions.
+Then use `openmrs-sdk update` or `openmrs-docker start --build` to redeploy with the new versions.
 
 ## Release
 

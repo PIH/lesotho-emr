@@ -30,14 +30,15 @@ Component versions are defined in `distro/pom.xml` and resolved into `distro/ope
 
 Local development runs through the shared
 [`openmrs-contrib-distro-tools`](https://github.com/PIH/openmrs-contrib-distro-tools) CLI
-(`docker.sh`/`sdk.sh`), installed once per machine rather than embedded in this repo.
+(`openmrs-docker`/`openmrs-sdk`), installed once per machine rather than embedded in this repo. See
+that repo's [Install](https://github.com/PIH/openmrs-contrib-distro-tools#install) section to put it
+on `PATH` — once it is, drop the `~/openmrs-contrib-distro-tools/` prefix from every command below,
+as the Windows section further down does.
 
-### Docker (`docker.sh`)
+### Docker (`openmrs-docker`)
 
 Clone `openmrs-contrib-distro-tools` (once per machine), then create a `botsabelo-demo` instance
-pointing at this repo. The commands below use the full path to the clone; if you add it to `PATH`
-instead (as the Windows setup script does automatically), drop the `~/openmrs-contrib-distro-tools/`
-prefix and just run `docker.sh`/`sdk.sh` directly, as the Windows section below does.
+pointing at this repo:
 
 ```bash
 git clone https://github.com/PIH/openmrs-contrib-distro-tools.git ~/openmrs-contrib-distro-tools
@@ -46,18 +47,18 @@ IMAGE_NAME=partnersinhealth/lesotho-emr \
   SEED_IMAGE_NAME=partnersinhealth/lesotho-emr-seed-botsabelo-demo \
   PIH_CONFIG=lesotho,lesotho-botsabelo-demo \
   DISTRO_SOURCE_DIR="$(pwd)" \
-  ~/openmrs-contrib-distro-tools/docker.sh create botsabelo-demo
+  ~/openmrs-contrib-distro-tools/openmrs-docker create botsabelo-demo
 
-~/openmrs-contrib-distro-tools/docker.sh botsabelo-demo start
-~/openmrs-contrib-distro-tools/docker.sh botsabelo-demo wait
+~/openmrs-contrib-distro-tools/openmrs-docker botsabelo-demo start
+~/openmrs-contrib-distro-tools/openmrs-docker botsabelo-demo wait
 ```
 
 Once created, day-to-day commands only need the instance name:
 
 ```bash
-~/openmrs-contrib-distro-tools/docker.sh botsabelo-demo stop
-~/openmrs-contrib-distro-tools/docker.sh botsabelo-demo logs
-~/openmrs-contrib-distro-tools/docker.sh botsabelo-demo destroy
+~/openmrs-contrib-distro-tools/openmrs-docker botsabelo-demo stop
+~/openmrs-contrib-distro-tools/openmrs-docker botsabelo-demo logs
+~/openmrs-contrib-distro-tools/openmrs-docker botsabelo-demo destroy
 ```
 
 | Command | Description |
@@ -83,27 +84,27 @@ initialize from scratch (~30 minutes).
 
 **Example — build from source and start:**
 ```bash
-~/openmrs-contrib-distro-tools/docker.sh botsabelo-demo start --build
+~/openmrs-contrib-distro-tools/openmrs-docker botsabelo-demo start --build
 ```
 
 **Example — develop against a locally-built distro with debug ports exposed:**
 ```bash
-~/openmrs-contrib-distro-tools/docker.sh botsabelo-demo start --dev --build
+~/openmrs-contrib-distro-tools/openmrs-docker botsabelo-demo start --dev --build
 ```
 
 **Example — run on a different port:** edit `TOMCAT_HTTP_PORT` in the instance's own env file
-(`~/openmrs/botsabelo-demo/env`) rather than passing it on the command line — `docker.sh` sources
+(`~/openmrs/botsabelo-demo/env`) rather than passing it on the command line — `openmrs-docker` sources
 that file directly, so a value already set there always wins over a same-named shell override.
 
 See [`openmrs-contrib-distro-tools`'s README](https://github.com/PIH/openmrs-contrib-distro-tools#env-file-reference)
 for the full instance `env` file reference.
 
-### OpenMRS SDK (`sdk.sh`)
+### OpenMRS SDK (`openmrs-sdk`)
 
-Use `sdk.sh` to run a site using the [OpenMRS SDK](https://wiki.openmrs.org/display/docs/OpenMRS+SDK), which sets up a local Tomcat server with its own MySQL instance.
+Use `openmrs-sdk` to run a site using the [OpenMRS SDK](https://wiki.openmrs.org/display/docs/OpenMRS+SDK), which sets up a local Tomcat server with its own MySQL instance.
 
 ```
-~/openmrs-contrib-distro-tools/sdk.sh <command> <server-id>
+~/openmrs-contrib-distro-tools/openmrs-sdk <command> <server-id>
 ```
 
 The server ID is a local name of your choosing — it controls the server directory
@@ -121,20 +122,20 @@ use anything.
 **Example — first-time setup:**
 ```bash
 DISTRO_SOURCE_DIR="$(pwd)" PIH_CONFIG=lesotho,lesotho-botsabelo-demo \
-  ~/openmrs-contrib-distro-tools/sdk.sh create lesotho
-~/openmrs-contrib-distro-tools/sdk.sh run lesotho
+  ~/openmrs-contrib-distro-tools/openmrs-sdk create lesotho
+~/openmrs-contrib-distro-tools/openmrs-sdk run lesotho
 ```
 
 **Example — after updating component versions:**
 ```bash
-DISTRO_SOURCE_DIR="$(pwd)" ~/openmrs-contrib-distro-tools/sdk.sh update lesotho
-~/openmrs-contrib-distro-tools/sdk.sh run lesotho
+DISTRO_SOURCE_DIR="$(pwd)" ~/openmrs-contrib-distro-tools/openmrs-sdk update lesotho
+~/openmrs-contrib-distro-tools/openmrs-sdk run lesotho
 ```
 
 **Example — redeploy configuration only:**
 ```bash
-DISTRO_SOURCE_DIR="$(pwd)" ~/openmrs-contrib-distro-tools/sdk.sh update-config lesotho
-~/openmrs-contrib-distro-tools/sdk.sh run lesotho
+DISTRO_SOURCE_DIR="$(pwd)" ~/openmrs-contrib-distro-tools/openmrs-sdk update-config lesotho
+~/openmrs-contrib-distro-tools/openmrs-sdk run lesotho
 ```
 
 #### Environment variable overrides
@@ -156,19 +157,19 @@ DISTRO_SOURCE_DIR="$(pwd)" ~/openmrs-contrib-distro-tools/sdk.sh update-config l
 
 **Example — run with JMX monitoring:**
 ```bash
-JMX_PORT=9000 ~/openmrs-contrib-distro-tools/sdk.sh run lesotho
+JMX_PORT=9000 ~/openmrs-contrib-distro-tools/openmrs-sdk run lesotho
 ```
 
 **Example — connect to an existing Docker MySQL container:**
 ```bash
 DISTRO_SOURCE_DIR="$(pwd)" DB_CONTAINER=mysql56 DB_PORT=3306 PIH_CONFIG=lesotho,lesotho-botsabelo-demo \
-  ~/openmrs-contrib-distro-tools/sdk.sh create lesotho
-~/openmrs-contrib-distro-tools/sdk.sh run lesotho
+  ~/openmrs-contrib-distro-tools/openmrs-sdk create lesotho
+~/openmrs-contrib-distro-tools/openmrs-sdk run lesotho
 ```
 
 ### Seeded Environments
 
-`docker.sh start` uses a pre-seeded image by default for fast startup (~5 minutes). Pass `--fresh` to
+`openmrs-docker start` uses a pre-seeded image by default for fast startup (~5 minutes). Pass `--fresh` to
 initialize from scratch (~30 minutes). See [CI and Publishing](#ci-and-publishing) below for which
 images are published and how to pin a specific version.
 
@@ -213,13 +214,13 @@ You only need to do this once — `openmrs-contrib-distro-tools` is now installe
 IMAGE_NAME=partnersinhealth/lesotho-emr \
   SEED_IMAGE_NAME=partnersinhealth/lesotho-emr-seed-botsabelo-demo \
   PIH_CONFIG=lesotho,lesotho-botsabelo-demo \
-  docker.sh create botsabelo-demo
+  openmrs-docker create botsabelo-demo
 ```
 
 ### Starting an environment
 
 ```bash
-docker.sh botsabelo-demo start
+openmrs-docker botsabelo-demo start
 ```
 
 The first time you start, Docker will download the pre-initialized image from the internet. This can
@@ -228,7 +229,7 @@ take 10–20 minutes depending on your connection. Subsequent starts will be muc
 Once the download is complete, run the following command to be notified when OpenMRS is fully ready:
 
 ```bash
-docker.sh botsabelo-demo wait
+openmrs-docker botsabelo-demo wait
 ```
 
 When you see **OpenMRS is ready**, open a browser and go to:
@@ -241,13 +242,13 @@ When you are done, stop the environment to free up memory. Your data is preserve
 when you start again.
 
 ```bash
-docker.sh botsabelo-demo stop
+openmrs-docker botsabelo-demo stop
 ```
 
 To wipe all data and start completely fresh next time:
 
 ```bash
-docker.sh botsabelo-demo destroy
+openmrs-docker botsabelo-demo destroy
 ```
 
 ### Keeping the tool up to date
@@ -284,7 +285,7 @@ A separate [Build seeded images](.github/workflows/build-seeded-images.yml) work
 |---|---|
 | [`partnersinhealth/lesotho-emr-seed-botsabelo-demo`](https://hub.docker.com/r/partnersinhealth/lesotho-emr-seed-botsabelo-demo) | `latest`, version |
 
-`docker.sh start` uses the seeded image by default; pass `--fresh` to initialize from scratch. To pin
+`openmrs-docker start` uses the seeded image by default; pass `--fresh` to initialize from scratch. To pin
 to a specific version, set `SEED_IMAGE_TAG=<version>` in the instance's `env` file.
 
 A separate [Update Versions](.github/workflows/update-versions.yml) workflow runs hourly and automatically commits any available snapshot dependency updates to `main`.
