@@ -1,12 +1,14 @@
 # PIH Lesotho EMR Distribution
 
-This repository defines the OpenMRS distribution for PIH Lesotho. It packages together the [PIH EMR](https://github.com/PIH/openmrs-distro-pihemr) parent distribution, Lesotho-specific content, and the PIH EMR frontend into a single deployable artifact. For background on OpenMRS distributions, see the [OpenMRS wiki](https://wiki.openmrs.org/display/docs/OpenMRS+Distributions).
+This repository defines the OpenMRS distribution for PIH Lesotho. It packages together the [PIH EMR](https://github.com/PIH/openmrs-distro-pihemr) parent distribution, 
+Lesotho-specific content, and the PIH EMR frontend into a single deployable artifact. 
+For more background on OpenMRS distributions, see the [OpenMRS wiki](https://wiki.openmrs.org/display/docs/OpenMRS+Distributions).
 
 ## Repository Structure
 
-| Directory | Description |
-|---|---|
-| [`content/`](content/README.md) | Lesotho-specific OpenMRS content package (Initializer configuration files) |
+| Directory | Description                                                                                |
+|---|--------------------------------------------------------------------------------------------|
+| [`content/`](content/README.md) | Lesotho-specific OpenMRS content package (Initializer and O3 configuration files)          |
 | [`distro/`](distro/README.md) | Distribution definition — resolves all component versions into `openmrs-distro.properties` |
 
 ## Components
@@ -20,7 +22,7 @@ This repository defines the OpenMRS distribution for PIH Lesotho. It packages to
 
 Component versions are defined in `distro/pom.xml` and resolved into `distro/openmrs-distro.properties` at build time.
 
-## Sites
+## Supported Configuration Profiles
 
 | Site | PIH Config |
 |---|---|
@@ -31,15 +33,21 @@ Component versions are defined in `distro/pom.xml` and resolved into `distro/ope
 Local development runs through the shared
 [`openmrs-contrib-distro-tools`](https://github.com/PIH/openmrs-contrib-distro-tools) CLI
 (`openmrs-docker`/`openmrs-sdk`), installed once per machine rather than embedded in this repo.
-Follow that repo's [Install](https://github.com/PIH/openmrs-contrib-distro-tools#install) section
-first — the commands below assume `openmrs-docker`/`openmrs-sdk` are already on your `PATH`.
+Follow that repo's [Install](https://github.com/PIH/openmrs-contrib-distro-tools#install) section first — the commands below assume `openmrs-docker`/`openmrs-sdk` are already on your `PATH`.
 
 ### Docker (`openmrs-docker`)
 
-Create a `kol-ci` instance pointing at this repo:
+For each supported configuration profile, an example environment file is provided in the repo root to enable getting started quickly.
+This preserves most of the default settings.  If you need to change anything, you can either create a new environment file
+and store it somewhere on your own machine for later reuse or set additional environment variables directly in the shell.
+Because this file is found in the distribution repository, it is assumed that this is checked out on your machine, and 
+that `openmrs-docker` commands are running from the root of the distribution repository.  For this reason, it sets the `DISTRO_SOURCE_DIR` 
+environment variable to this location.  If you are using this file as an example for running elsewhere, you may need to change or remove this.
+
+To use the example environment file for `kol-ci` to get up and running with a new instance:
 
 ```bash
-source kol-ci.env  # OR set environment variables manually here
+source kol-ci.env  # Example kol-ci.env is supplied OR you can create your own OR set environment variables explicitly
 openmrs-docker create kol-ci
 openmrs-docker kol-ci start
 openmrs-docker kol-ci wait
@@ -71,8 +79,12 @@ openmrs-docker kol-ci destroy
 | `--dev` | Expose debug ports and mount a locally-built distro over the image |
 | `--force` | Skip the confirmation prompt (`destroy` only) |
 
-By default, `start` uses a pre-seeded image for fast startup (~5 minutes). Pass `--fresh` to
-initialize from scratch (~30 minutes).
+By default, `start` uses a pre-seeded image for fast startup (~5 minutes). Pass `--fresh` to initialize from scratch (~30 minutes).
+
+If you are a developer and want to make local changes to the distro (including content), you can use the `--build` option
+to build the distro from source and use the resulting image.  To do so, you need to ensure that you either pass the `DISTRO_SOURCE_DIR`
+environment variable when running the `create` command that points to your locally check out of this repository, or you 
+will need to manually update it in your already created instances env file.
 
 **Example — build from source and start:**
 ```bash
@@ -154,7 +166,7 @@ JMX_PORT=9000 openmrs-sdk run lesotho
 **Example — connect to an existing Docker MySQL container:**
 ```bash
 DB_CONTAINER=mysql56 DB_PORT=3308 PIH_CONFIG=lesotho,lesotho-kol-ci \
-  openmrs-sdk create lesotho
+openmrs-sdk create lesotho
 openmrs-sdk run lesotho
 ```
 
@@ -176,8 +188,7 @@ PIH_CONFIG=lesotho,lesotho-kol-ci \
 openmrs-docker create kol-ci
 ```
 
-Then continue that walkthrough from "Starting an environment" onward, using `kol-ci` as
-the instance name.
+Then continue that walkthrough from "Starting an environment" onward, using `kol-ci` as the instance name.
 
 ## CI and Publishing
 
