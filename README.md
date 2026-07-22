@@ -8,7 +8,6 @@ This repository defines the OpenMRS distribution for PIH Lesotho. It packages to
 |---|---|
 | [`content/`](content/README.md) | Lesotho-specific OpenMRS content package (Initializer configuration files) |
 | [`distro/`](distro/README.md) | Distribution definition — resolves all component versions into `openmrs-distro.properties` |
-| [`docker/`](docker/README.md) | Docker Compose setup for local and CI environments |
 
 ## Components
 
@@ -25,20 +24,33 @@ Component versions are defined in `distro/pom.xml` and resolved into `distro/ope
 
 | Site | PIH Config |
 |---|---|
-| `botsabelo-demo` | `lesotho,lesotho-botsabelo-demo` |
-
-## Running on Windows
-
-For step-by-step instructions to run a local environment on Windows, see the [Running on Windows](docker/README.md#running-on-windows) section of the Docker setup guide.
+| `kol-ci` | `lesotho,lesotho-kol-ci` |
 
 ## Developer Guide
 
-### Docker (`docker.sh`)
+Local development runs through the shared
+[`openmrs-contrib-distro-tools`](https://github.com/PIH/openmrs-contrib-distro-tools) CLI
+(`openmrs-docker`/`openmrs-sdk`), installed once per machine rather than embedded in this repo.
+Follow that repo's [Install](https://github.com/PIH/openmrs-contrib-distro-tools#install) section
+first — the commands below assume `openmrs-docker`/`openmrs-sdk` are already on your `PATH`.
 
-Use `docker.sh` to run a site locally using Docker Compose.
+### Docker (`openmrs-docker`)
 
+Create a `kol-ci` instance pointing at this repo:
+
+```bash
+source kol-ci.env  # OR set environment variables manually here
+openmrs-docker create kol-ci
+openmrs-docker kol-ci start
+openmrs-docker kol-ci wait
 ```
-./docker.sh <site> <command> [options]
+
+Once created, day-to-day commands only need the instance name:
+
+```bash
+openmrs-docker kol-ci stop
+openmrs-docker kol-ci logs
+openmrs-docker kol-ci destroy
 ```
 
 | Command | Description |
@@ -47,48 +59,49 @@ Use `docker.sh` to run a site locally using Docker Compose.
 | `wait` | Wait for OpenMRS to finish initializing |
 | `update` | Stop and restart the stack |
 | `build` | Build the distribution from source and create a local Docker image |
+| `pull` | Pull the images this instance would use, without starting anything |
 | `stop` | Stop the running stack |
 | `logs` | Tail container logs |
-| `destroy` | Stop the stack and delete all volumes (wipes database) |
+| `destroy` | Stop the stack, delete all volumes, and remove the instance directory |
 
 | Option | Description |
 |---|---|
 | `--build` | Build the distribution from source before starting |
 | `--fresh` | Initialize OpenMRS from scratch instead of using a pre-seeded image |
+| `--dev` | Expose debug ports and mount a locally-built distro over the image |
+| `--force` | Skip the confirmation prompt (`destroy` only) |
 
-By default, `start` uses a pre-seeded image for fast startup (~5 minutes). Pass `--fresh` to initialize from scratch (~30 minutes).
-
-**Example — start with pre-seeded image (default):**
-```bash
-./docker.sh botsabelo-demo start
-```
-
-**Example — wait for OpenMRS to be ready:**
-```bash
-./docker.sh botsabelo-demo wait
-```
+By default, `start` uses a pre-seeded image for fast startup (~5 minutes). Pass `--fresh` to
+initialize from scratch (~30 minutes).
 
 **Example — build from source and start:**
 ```bash
-./docker.sh botsabelo-demo start --build
+openmrs-docker kol-ci start --build
 ```
 
-**Example — run on a different port:**
+**Example — develop against a locally-built distro with debug ports exposed:**
 ```bash
-TOMCAT_HTTP_PORT=9090 ./docker.sh botsabelo-demo start
+openmrs-docker kol-ci start --dev --build
 ```
 
-See [`docker/README.md`](docker/README.md) for the full Docker Compose reference including all environment variables.
+**Example — run on a different port:** edit `TOMCAT_HTTP_PORT` in the instance's own env file
+(`~/openmrs/kol-ci/env`) rather than passing it on the command line — `openmrs-docker` sources
+that file directly, so a value already set there always wins over a same-named shell override.
 
-### OpenMRS SDK (`sdk.sh`)
+See [`openmrs-contrib-distro-tools`'s README](https://github.com/PIH/openmrs-contrib-distro-tools#env-file-reference)
+for the full instance `env` file reference.
 
-Use `sdk.sh` to run a site using the [OpenMRS SDK](https://wiki.openmrs.org/display/docs/OpenMRS+SDK), which sets up a local Tomcat server with its own MySQL instance.
+### OpenMRS SDK (`openmrs-sdk`)
+
+Use `openmrs-sdk` to run a site using the [OpenMRS SDK](https://wiki.openmrs.org/display/docs/OpenMRS+SDK), which sets up a local Tomcat server with its own MySQL instance.
 
 ```
-./sdk.sh <command> <server-id>
+openmrs-sdk <command> <server-id>
 ```
 
-The server ID is a local name of your choosing — it controls the server directory (`~/openmrs/<server-id>`) and defaults the database name. Examples below use `lesotho` but you can use anything.
+The server ID is a local name of your choosing — it controls the server directory
+(`~/openmrs/<server-id>`) and defaults the database name. Examples below use `lesotho` but you can
+use anything.
 
 | Command | Description |
 |---|---|
@@ -100,20 +113,20 @@ The server ID is a local name of your choosing — it controls the server direct
 
 **Example — first-time setup:**
 ```bash
-./sdk.sh create lesotho
-./sdk.sh run lesotho
+PIH_CONFIG=lesotho,lesotho-kol-ci openmrs-sdk create lesotho
+openmrs-sdk run lesotho
 ```
 
 **Example — after updating component versions:**
 ```bash
-./sdk.sh update lesotho
-./sdk.sh run lesotho
+openmrs-sdk update lesotho
+openmrs-sdk run lesotho
 ```
 
 **Example — redeploy configuration only:**
 ```bash
-./sdk.sh update-config lesotho
-./sdk.sh run lesotho
+openmrs-sdk update-config lesotho
+openmrs-sdk run lesotho
 ```
 
 #### Environment variable overrides
@@ -121,31 +134,50 @@ The server ID is a local name of your choosing — it controls the server direct
 | Variable | Default | Commands | Description |
 |---|---|---|---|
 | `SERVER_ID` | positional arg | all | SDK server directory name |
-| `PIH_CONFIG` | `lesotho,lesotho-botsabelo-demo` | `create` | PIH config profile passed to SDK setup |
+| `DISTRO_SOURCE_DIR` | current directory | all | Path to this repo's checkout |
+| `PIH_CONFIG` | _(required)_ | `create` | PIH config profile passed to SDK setup — e.g. `lesotho,lesotho-kol-ci` |
 | `SERVER_PORT` | `8080` | `create` | Tomcat HTTP port |
 | `DEBUG_PORT` | `1044` | `create` | Remote debug port |
 | `JMX_PORT` | _(disabled)_ | `run` | Enable JMX monitoring on this port |
 | `DB_CONTAINER` | _(SDK-managed)_ | `create`, `destroy` | Connect to an existing Docker MySQL container |
 | `DB_HOST` | `localhost` | `create` | Database host (when `DB_CONTAINER` is set) |
-| `DB_PORT` | `3308` | `create` | Database port (when `DB_CONTAINER` is set) |
+| `DB_PORT` | `3306` | `create` | Database port (when `DB_CONTAINER` is set) |
 | `DB_NAME` | server ID | `create`, `destroy` | Database name |
 | `DB_USER` | `root` | `create`, `destroy` | Database user |
 | `DB_PASSWORD` | `root` | `create`, `destroy` | Database password |
 
 **Example — run with JMX monitoring:**
 ```bash
-JMX_PORT=9000 ./sdk.sh run lesotho
+JMX_PORT=9000 openmrs-sdk run lesotho
 ```
 
 **Example — connect to an existing Docker MySQL container:**
 ```bash
-DB_CONTAINER=mysql56 DB_PORT=3306 ./sdk.sh create lesotho
-./sdk.sh run lesotho
+DB_CONTAINER=mysql56 DB_PORT=3308 PIH_CONFIG=lesotho,lesotho-kol-ci \
+  openmrs-sdk create lesotho
+openmrs-sdk run lesotho
 ```
 
 ### Seeded Environments
 
-`docker.sh start` uses a pre-seeded image by default for fast startup (~5 minutes). Pass `--fresh` to initialize from scratch (~30 minutes). See the [Seeded environments](docker/README.md#seeded-environments) section of the Docker setup guide for details.
+`openmrs-docker start` uses a pre-seeded image by default for fast startup (~5 minutes). Pass `--fresh` to
+initialize from scratch (~30 minutes). See [CI and Publishing](#ci-and-publishing) below for which
+images are published and how to pin a specific version.
+
+## Running on Windows
+
+Follow [openmrs-contrib-distro-tools' Windows walkthrough](https://github.com/PIH/openmrs-contrib-distro-tools#running-on-windows)
+for installing WSL/Docker, starting/stopping an instance, keeping the tool up to date, and
+troubleshooting. The one step specific to this distro is Step 3, creating the instance:
+
+```bash
+IMAGE_NAME=partnersinhealth/lesotho-emr \
+PIH_CONFIG=lesotho,lesotho-kol-ci \
+openmrs-docker create kol-ci
+```
+
+Then continue that walkthrough from "Starting an environment" onward, using `kol-ci` as
+the instance name.
 
 ## CI and Publishing
 
@@ -158,8 +190,9 @@ A separate [Build seeded images](.github/workflows/build-seeded-images.yml) work
 
 | Image | Tags |
 |---|---|
-| [`partnersinhealth/lesotho-emr-seed-botsabelo-demo`](https://hub.docker.com/r/partnersinhealth/lesotho-emr-seed-botsabelo-demo) | `latest`, version |
+| [`partnersinhealth/lesotho-emr-seed-kol-ci`](https://hub.docker.com/r/partnersinhealth/lesotho-emr-seed-kol-ci) | `latest`, version |
 
-See [Seeded environments](docker/README.md#seeded-environments) for usage.
+`openmrs-docker start` uses the seeded image by default; pass `--fresh` to initialize from scratch. To pin
+to a specific version, set `SEED_IMAGE_TAG=<version>` in the instance's `env` file.
 
 A separate [Update Versions](.github/workflows/update-versions.yml) workflow runs hourly and automatically commits any available snapshot dependency updates to `main`.
