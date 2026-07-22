@@ -24,7 +24,7 @@ Component versions are defined in `distro/pom.xml` and resolved into `distro/ope
 
 | Site | PIH Config |
 |---|---|
-| `botsabelo-demo` | `lesotho,lesotho-botsabelo-demo` |
+| `kol-ci` | `lesotho,lesotho-kol-ci` |
 
 ## Developer Guide
 
@@ -36,25 +36,25 @@ first — the commands below assume `openmrs-docker`/`openmrs-sdk` are already o
 
 ### Docker (`openmrs-docker`)
 
-Create a `botsabelo-demo` instance pointing at this repo:
+Create a `kol-ci` instance pointing at this repo:
 
 ```bash
 IMAGE_NAME=partnersinhealth/lesotho-emr \
-  SEED_IMAGE_NAME=partnersinhealth/lesotho-emr-seed-botsabelo-demo \
-  PIH_CONFIG=lesotho,lesotho-botsabelo-demo \
+  SEED_IMAGE_NAME=partnersinhealth/lesotho-emr-seed-kol-ci \
+  PIH_CONFIG=lesotho,lesotho-kol-ci \
   DISTRO_SOURCE_DIR="$(pwd)" \
-  openmrs-docker create botsabelo-demo
+  openmrs-docker create kol-ci
 
-openmrs-docker botsabelo-demo start
-openmrs-docker botsabelo-demo wait
+openmrs-docker kol-ci start
+openmrs-docker kol-ci wait
 ```
 
 Once created, day-to-day commands only need the instance name:
 
 ```bash
-openmrs-docker botsabelo-demo stop
-openmrs-docker botsabelo-demo logs
-openmrs-docker botsabelo-demo destroy
+openmrs-docker kol-ci stop
+openmrs-docker kol-ci logs
+openmrs-docker kol-ci destroy
 ```
 
 | Command | Description |
@@ -80,16 +80,16 @@ initialize from scratch (~30 minutes).
 
 **Example — build from source and start:**
 ```bash
-openmrs-docker botsabelo-demo start --build
+openmrs-docker kol-ci start --build
 ```
 
 **Example — develop against a locally-built distro with debug ports exposed:**
 ```bash
-openmrs-docker botsabelo-demo start --dev --build
+openmrs-docker kol-ci start --dev --build
 ```
 
 **Example — run on a different port:** edit `TOMCAT_HTTP_PORT` in the instance's own env file
-(`~/openmrs/botsabelo-demo/env`) rather than passing it on the command line — `openmrs-docker` sources
+(`~/openmrs/kol-ci/env`) rather than passing it on the command line — `openmrs-docker` sources
 that file directly, so a value already set there always wins over a same-named shell override.
 
 See [`openmrs-contrib-distro-tools`'s README](https://github.com/PIH/openmrs-contrib-distro-tools#env-file-reference)
@@ -117,7 +117,7 @@ use anything.
 
 **Example — first-time setup:**
 ```bash
-PIH_CONFIG=lesotho,lesotho-botsabelo-demo openmrs-sdk create lesotho
+PIH_CONFIG=lesotho,lesotho-kol-ci openmrs-sdk create lesotho
 openmrs-sdk run lesotho
 ```
 
@@ -139,7 +139,7 @@ openmrs-sdk run lesotho
 |---|---|---|---|
 | `SERVER_ID` | positional arg | all | SDK server directory name |
 | `DISTRO_SOURCE_DIR` | current directory | all | Path to this repo's checkout |
-| `PIH_CONFIG` | _(required)_ | `create` | PIH config profile passed to SDK setup — e.g. `lesotho,lesotho-botsabelo-demo` |
+| `PIH_CONFIG` | _(required)_ | `create` | PIH config profile passed to SDK setup — e.g. `lesotho,lesotho-kol-ci` |
 | `SERVER_PORT` | `8080` | `create` | Tomcat HTTP port |
 | `DEBUG_PORT` | `1044` | `create` | Remote debug port |
 | `JMX_PORT` | _(disabled)_ | `run` | Enable JMX monitoring on this port |
@@ -157,7 +157,7 @@ JMX_PORT=9000 openmrs-sdk run lesotho
 
 **Example — connect to an existing Docker MySQL container:**
 ```bash
-DB_CONTAINER=mysql56 DB_PORT=3308 PIH_CONFIG=lesotho,lesotho-botsabelo-demo \
+DB_CONTAINER=mysql56 DB_PORT=3308 PIH_CONFIG=lesotho,lesotho-kol-ci \
   openmrs-sdk create lesotho
 openmrs-sdk run lesotho
 ```
@@ -176,12 +176,12 @@ troubleshooting. The one step specific to this distro is Step 3, creating the in
 
 ```bash
 IMAGE_NAME=partnersinhealth/lesotho-emr \
-  SEED_IMAGE_NAME=partnersinhealth/lesotho-emr-seed-botsabelo-demo \
-  PIH_CONFIG=lesotho,lesotho-botsabelo-demo \
-  openmrs-docker create botsabelo-demo
+  SEED_IMAGE_NAME=partnersinhealth/lesotho-emr-seed-kol-ci \
+  PIH_CONFIG=lesotho,lesotho-kol-ci \
+  openmrs-docker create kol-ci
 ```
 
-Then continue that walkthrough from "Starting an environment" onward, using `botsabelo-demo` as
+Then continue that walkthrough from "Starting an environment" onward, using `kol-ci` as
 the instance name.
 
 ## CI and Publishing
@@ -195,7 +195,7 @@ A separate [Build seeded images](.github/workflows/build-seeded-images.yml) work
 
 | Image | Tags |
 |---|---|
-| [`partnersinhealth/lesotho-emr-seed-botsabelo-demo`](https://hub.docker.com/r/partnersinhealth/lesotho-emr-seed-botsabelo-demo) | `latest`, version |
+| [`partnersinhealth/lesotho-emr-seed-kol-ci`](https://hub.docker.com/r/partnersinhealth/lesotho-emr-seed-kol-ci) | `latest`, version |
 
 `openmrs-docker start` uses the seeded image by default; pass `--fresh` to initialize from scratch. To pin
 to a specific version, set `SEED_IMAGE_TAG=<version>` in the instance's `env` file.
