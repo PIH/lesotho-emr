@@ -39,12 +39,8 @@ first — the commands below assume `openmrs-docker`/`openmrs-sdk` are already o
 Create a `kol-ci` instance pointing at this repo:
 
 ```bash
-IMAGE_NAME=partnersinhealth/lesotho-emr \
-  SEED_IMAGE_NAME=partnersinhealth/lesotho-emr-seed-kol-ci \
-  PIH_CONFIG=lesotho,lesotho-kol-ci \
-  DISTRO_SOURCE_DIR="$(pwd)" \
-  openmrs-docker create kol-ci
-
+source kol-ci.env  # OR set environment variables manually here
+openmrs-docker create kol-ci
 openmrs-docker kol-ci start
 openmrs-docker kol-ci wait
 ```
@@ -176,9 +172,8 @@ troubleshooting. The one step specific to this distro is Step 3, creating the in
 
 ```bash
 IMAGE_NAME=partnersinhealth/lesotho-emr \
-  SEED_IMAGE_NAME=partnersinhealth/lesotho-emr-seed-kol-ci \
-  PIH_CONFIG=lesotho,lesotho-kol-ci \
-  openmrs-docker create kol-ci
+PIH_CONFIG=lesotho,lesotho-kol-ci \
+openmrs-docker create kol-ci
 ```
 
 Then continue that walkthrough from "Starting an environment" onward, using `kol-ci` as
