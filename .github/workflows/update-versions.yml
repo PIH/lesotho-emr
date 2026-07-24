@@ -7,6 +7,8 @@ on:
 
 jobs:
   update-versions:
+    permissions:
+      contents: write
     concurrency:
       group: update-versions-${{ github.ref }}
       cancel-in-progress: true
