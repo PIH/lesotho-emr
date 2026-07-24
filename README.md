@@ -65,23 +65,26 @@ openmrs-docker kol-ci destroy
 
 | Command | Description |
 |---|---|
+| `initialize` | Pre-load a brand-new instance's data volumes from a seed image (see [Seeded Environments](#seeded-environments)) |
 | `start` | Start the stack |
+| `stop` | Stop the running stack |
+| `restart` | Restart the running containers in place (no rebuild, no recreate) |
+| `status` | Show the state of this instance's containers |
+| `update` | Pull latest images and reconcile the stack (recreates only what changed) |
+| `sync` | Refresh this instance's copied service fragments from the tool's current templates |
+| `add-service <svc>` | Attach a canonical service fragment |
+| `remove-service <svc>` | Detach a service fragment and remove its now-orphaned container |
 | `wait` | Wait for OpenMRS to finish initializing |
-| `update` | Stop and restart the stack |
 | `build` | Build the distribution from source and create a local Docker image |
 | `pull` | Pull the images this instance would use, without starting anything |
-| `stop` | Stop the running stack |
-| `logs` | Tail container logs |
+| `logs [service]` | Tail container logs; defaults to every service |
 | `destroy` | Stop the stack, delete all volumes, and remove the instance directory |
 
 | Option | Description |
 |---|---|
 | `--build` | Build the distribution from source before starting |
-| `--fresh` | Initialize OpenMRS from scratch instead of using a pre-seeded image |
 | `--dev` | Expose debug ports and mount a locally-built distro over the image |
 | `--force` | Skip the confirmation prompt (`destroy` only) |
-
-By default, `start` uses a pre-seeded image for fast startup (~5 minutes). Pass `--fresh` to initialize from scratch (~30 minutes).
 
 If you are a developer and want to make local changes to the distro (including content), you can use the `--build` option
 to build the distro from source and use the resulting image.  To do so, you need to ensure that you either pass the `DISTRO_SOURCE_DIR`
@@ -98,7 +101,7 @@ openmrs-docker kol-ci start --build
 openmrs-docker kol-ci start --dev --build
 ```
 
-**Example — run on a different port:** edit `TOMCAT_HTTP_PORT` in the instance's own env file
+**Example — run on a different port:** edit `OPENMRS_HTTP_PORT` in the instance's own env file
 (`~/openmrs/kol-ci/env`) rather than passing it on the command line — `openmrs-docker` sources
 that file directly, so a value already set there always wins over a same-named shell override.
 
@@ -174,9 +177,14 @@ openmrs-sdk run lesotho
 
 ### Seeded Environments
 
-`openmrs-docker start` uses a pre-seeded image by default for fast startup (~5 minutes). Pass `--fresh` to
-initialize from scratch (~30 minutes). See [CI and Publishing](#ci-and-publishing) below for which
-images are published and how to pin a specific version.
+Run `openmrs-docker <name> initialize` once, right after `create` and before the first `start` —
+it refuses to run if the instance already has data volumes, so it only ever applies to a
+brand-new instance. It pre-loads the data/database volumes from `SEED_IMAGE_NAME`
+(`partnersinhealth/lesotho-emr-seed-kol-ci` by default in `kol-ci.env`), cutting the first
+`start` down from a full migration (~30 minutes) to a normal boot (~5 minutes). `start`/`update`
+behave identically afterward whether or not `initialize` was ever run. See [CI and
+Publishing](#ci-and-publishing) below for which seed images are published and how to pin a
+specific version.
 
 ## Running on Windows
 
@@ -185,8 +193,8 @@ for installing WSL/Docker, starting/stopping an instance, keeping the tool up to
 troubleshooting. The one step specific to this distro is Step 3, creating the instance:
 
 ```bash
-IMAGE_NAME=partnersinhealth/lesotho-emr \
-PIH_CONFIG=lesotho,lesotho-kol-ci \
+OPENMRS_IMAGE_NAME=partnersinhealth/lesotho-emr \
+OPENMRS_PIH_CONFIG=lesotho,lesotho-kol-ci \
 openmrs-docker create kol-ci
 ```
 
@@ -205,7 +213,8 @@ A separate [Build seeded images](.github/workflows/build-seeded-images.yml) work
 |---|---|
 | [`partnersinhealth/lesotho-emr-seed-kol-ci`](https://hub.docker.com/r/partnersinhealth/lesotho-emr-seed-kol-ci) | `latest`, version |
 
-`openmrs-docker start` uses the seeded image by default; pass `--fresh` to initialize from scratch. To pin
-to a specific version, set `SEED_IMAGE_TAG=<version>` in the instance's `env` file.
+Run `openmrs-docker <name> initialize` to pre-load an instance from this seed image (see
+[Seeded Environments](#seeded-environments) above). To pin to a specific version, set
+`SEED_IMAGE_TAG=<version>` in the instance's `env` file before running `initialize`.
 
 A separate [Update Versions](.github/workflows/update-versions.yml) workflow runs hourly and automatically commits any available snapshot dependency updates to `main`.
