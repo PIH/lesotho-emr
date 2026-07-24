@@ -49,8 +49,10 @@ To use the example environment file for `kol-ci` to get up and running with a ne
 ```bash
 source kol-ci.env  # Example kol-ci.env is supplied OR you can create your own OR set environment variables explicitly
 openmrs-docker create kol-ci
+openmrs-docker kol-ci initialize # This step is optional, but highly recommended to speed initial startup time
 openmrs-docker kol-ci start
-openmrs-docker kol-ci wait
+openmrs-docker kol-ci wait  # This step will tail the logs until OpenMRS is ready and then terminate
+openmrs-docker kol-ci logs  # Alternatively, this will tail the logs indefinitely
 ```
 
 Once created, day-to-day commands only need the instance name:
