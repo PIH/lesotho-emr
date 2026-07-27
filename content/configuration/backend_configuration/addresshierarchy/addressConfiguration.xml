@@ -2,8 +2,21 @@
     <wipe>true</wipe>
     <addressComponents>
         <addressComponent>
-            <field>COUNTY_DISTRICT</field>
+            <field>COUNTRY</field>
+            <nameMapping>Country</nameMapping>
+            <sizeMapping>40</sizeMapping>
+            <elementDefault>Liberia</elementDefault>
+            <requiredInHierarchy>true</requiredInHierarchy>
+        </addressComponent>
+        <addressComponent>
+            <field>STATE_PROVINCE</field>
             <nameMapping>District</nameMapping>
+            <sizeMapping>40</sizeMapping>
+            <requiredInHierarchy>false</requiredInHierarchy>
+        </addressComponent>
+        <addressComponent>
+            <field>COUNTY_DISTRICT</field>
+            <nameMapping>CommunityCouncil</nameMapping>
             <sizeMapping>40</sizeMapping>
             <requiredInHierarchy>false</requiredInHierarchy>
         </addressComponent>
