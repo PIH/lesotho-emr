@@ -1,0 +1,3 @@
+Uuid,Role name,Description,Inherited roles,Privileges
+6af99db0-e793-11e4-b571-0800200c9a66,Application Role: radiologyTechnician,Application Role: radiologyTechnician,,App: coreapps.findPatient; App: coreapps.patientVisits; Task: org.openmrs.module.radiologyapp.tab
+3672ebe7-ed59-461f-a662-5ae3cd2e46ac,Application Role: radiology,Application Role: radiology,,App: coreapps.activeVisits; App: emr.inpatients; App: reportingui.reports; Task: coreapps.createVisit; Task: emr.printWristband; Task: emr.requestPaperRecord; Task: org.openmrs.module.radiologyapp.orderCT; Task: org.openmrs.module.radiologyapp.orderUS; Task: org.openmrs.module.radiologyapp.orderXray; Task: org.openmrs.module.radiologyapp.tab
