@@ -12,13 +12,13 @@
             <field>COUNTY_DISTRICT</field>
             <nameMapping>District</nameMapping>
             <sizeMapping>40</sizeMapping>
-            <requiredInHierarchy>false</requiredInHierarchy>
+            <requiredInHierarchy>true</requiredInHierarchy>
         </addressComponent>
         <addressComponent>
             <field>CITY_VILLAGE</field>
             <nameMapping>Village</nameMapping>
             <sizeMapping>40</sizeMapping>
-            <requiredInHierarchy>false</requiredInHierarchy>
+            <requiredInHierarchy>true</requiredInHierarchy>
         </addressComponent>
     </addressComponents>
     <lineByLineFormat>
