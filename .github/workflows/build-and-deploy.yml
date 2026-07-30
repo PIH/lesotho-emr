@@ -4,6 +4,7 @@ on:
   push:
     branches: [main]
   workflow_dispatch:
+  repository_dispatch:
 
 jobs:
   build-and-publish:
@@ -15,3 +16,17 @@ jobs:
     with:
       image_name: partnersinhealth/lesotho-emr
     secrets: inherit
+
+  deploy:
+    needs: build-and-publish
+    runs-on: ubuntu-latest
+    steps:
+    - name: Deploy to App Cluster
+      uses: fjogeleit/http-request-action@v1
+      with:
+        url: 'https://bamboo-ci.pih-emr.org/rest/api/latest/queue/OMRS-DEPLOYAPPCLSTR01'
+        bearerToken: ${{ secrets.PIH_BAMBOO_API_KEY }}
+        customHeaders: '{"Accept": "application/json"}'
+        retry: 60
+        retryWait: 60000
+        ignoreStatusCodes: 400
