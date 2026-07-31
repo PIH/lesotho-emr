@@ -1,0 +1,59 @@
+header {
+    background: #FB9500;
+}
+
+header a,
+header a:visited,
+header a:hover,
+header a:link {
+    background: #FF9800;
+}
+
+/* Locations on login page */
+ul.select li.selected {
+    background-color: #F6BE00;
+    color: #3E3E3F;
+    font-weight: bolder;
+    border-color: transparent;
+}
+
+ul.select li:hover {
+    background-color: #F6BE00;
+    color: #3E3E3E;
+    cursor: pointer;
+}
+
+ul.select li {
+    color: #0f5149;
+}
+
+.dashboard:hover .visit-link:hover {
+    color: #3F746D;
+}
+
+.navigation {
+    color: #EEEEEE;
+}
+
+header .user-options li.change-location {
+    border: 1px solid #FF9800;
+}
+
+header .user-options li.change-location:hover,
+header .user-options li.change-location .focus {
+    background: #FF9800;
+}
+
+/* Header on popups */
+.dialog .dialog-header,
+.dialog-diagnoses .dialog-header,
+.ngdialog.ngdialog-theme-default .ngdialog-content .dialog-header {
+    background: #FB9500;
+    color: white;
+    padding: 0 20px;
+    padding-top: 5px;
+    border-bottom: #FB9500 1px solid;
+}
+
+
+
