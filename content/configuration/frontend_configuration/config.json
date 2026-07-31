@@ -1,0 +1,16 @@
+{
+  "@openmrs/esm-login-app": {
+  "logo": {
+    "src": "logo.png",
+    "alt": "Partners In Health - Lesotho"
+  }
+},
+  "@openmrs/esm-primary-navigation-app": {
+    "logo": {
+      "src": "logo.png",
+      "alt": "Partners In Health - Lesotho",
+      "name": "Partners In Health - Lesotho",
+      "link": "${openmrsBase}/index.htm"
+    }
+  }
+}
