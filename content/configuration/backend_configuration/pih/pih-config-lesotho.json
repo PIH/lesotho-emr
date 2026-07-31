@@ -18,7 +18,7 @@
   "visitsPageWithSpecificUrl": "/pihcore/visit/visit.page?patient={{patient.uuid}}&visit={{visit.uuid}}#/overview",
 
   "addressConfig": {
-    "manualFields": ["countyDistrict", "cityVillage"]
+    "shortcutField": "cityVillage"
   },
 
   "registrationConfig": {
