@@ -9,6 +9,10 @@ header a:link {
     background: #FF9800;
 }
 
+.navbar {
+    min-height: 4.2em;
+}
+
 /* Locations on login page */
 ul.select li.selected {
     background-color: #F6BE00;
