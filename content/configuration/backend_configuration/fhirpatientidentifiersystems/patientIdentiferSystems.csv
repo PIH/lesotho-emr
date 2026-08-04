@@ -1,0 +1,2 @@
+UUID,Void/Retire,Patient identifier type,Url
+0db2ef9a-39b8-46d2-a3cd-5178055bb681,,${patientIdentifierType.emrId.uuid},http://www.pih.org/identifiers/lesotho/emr-id
