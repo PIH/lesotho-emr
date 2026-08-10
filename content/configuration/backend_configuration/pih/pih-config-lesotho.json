@@ -31,5 +31,10 @@
         "countyDistrict": "1"
       }
     }
-  }
+  },
+  "extraIdentifierTypes": [
+    "4ca30944-cfb4-4dfa-b0df-18f023351fad",
+    "d422b023-444e-4fbc-ba80-cb399b99a112",
+    "06eb9c95-6d60-43c5-93e5-255bd2c2cbd5"
+  ]
 }

@@ -1,2 +1,5 @@
 UUID,Void/Retire,Name,Description,Required,Format,Format description,Validator,Location behavior,Uniqueness behavior
-${patientIdentifierType.emrId.uuid},,EMR ID,EMR ID,FALSE,"","",,NOT_USED,UNIQUE
+${patientIdentifierType.emrId.uuid},,EMR ID,EMR ID,TRUE,"","",,NOT_USED,UNIQUE
+${patientIdentifierType.mdrtbId.uuid},,MDR-TB ID,MDR-TB ID,FALSE,"^GLC/LS[0-9]{4}$","'GLC/LS', followed by 4 digits",,NOT_USED,UNIQUE
+${patientIdentifierType.nationalId.uuid},,National ID,National ID,FALSE,"^[0-9]{12}$","12 digits",,NOT_USED,UNIQUE
+${patientIdentifierType.dstbId.uuid},,DS-TB ID,DS-TB ID,FALSE,"^[A-Z]{1}[0-9]{8}/[0-9]{2}$","One letter, followed by 8 digits, followed by '/', followed by 2 digits",,NOT_USED,UNIQUE
