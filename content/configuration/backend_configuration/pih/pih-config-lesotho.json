@@ -31,5 +31,10 @@
         "countyDistrict": "1"
       }
     }
-  }
+  },
+  "extraIdentifierTypes": [
+    "${patientIdentifierType.mdrtbId.uuid}",
+    "${patientIdentifierType.nationalId.uuid}",
+    "${patientIdentifierType.dstbId.uuid}"
+  ]
 }
