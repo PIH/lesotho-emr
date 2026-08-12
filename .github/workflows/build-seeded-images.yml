@@ -6,14 +6,14 @@ on:
   workflow_dispatch:
 
 jobs:
-  kol-ci:
+  lesotho:
     if: github.repository_owner == 'PIH'
     concurrency:
-      group: build-seeded-images-kol-ci-${{ github.ref }}
+      group: build-seeded-images-lesotho-${{ github.ref }}
       cancel-in-progress: true
     uses: PIH/openmrs-contrib-distro-tools/.github/workflows/build-seeded-image.yml@main
     with:
       image_name: partnersinhealth/lesotho-emr
-      site: kol-ci
-      pih_config: lesotho,lesotho-kol-ci
+      site: lesotho
+      pih_config: lesotho
     secrets: inherit
