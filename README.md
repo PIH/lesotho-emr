@@ -121,6 +121,6 @@ CI is handled by GitHub Actions. On every push to `main`, the [Build and deploy]
 1. Builds and publishes the Maven artifact to [Maven Central](https://central.sonatype.com/artifact/org.pih.openmrs/lesotho-distro) as `org.pih.openmrs:lesotho-distro`.
 2. Builds and pushes a multi-platform Docker image (amd64 + arm64) to Docker Hub at [`partnersinhealth/lesotho-emr`](https://hub.docker.com/r/partnersinhealth/lesotho-emr), tagged with both `latest` and the Maven project version.
 
-A separate [Build seeded images](.github/workflows/build-seeded-images.yml) workflow runs nightly and publishes pre-initialized seed images to Docker Hub for `kol-ci` (`partnersinhealth/lesotho-emr-seed-kol-ci`).
+A separate [Build seeded images](.github/workflows/build-seeded-images.yml) workflow runs nightly and publishes a pre-initialized seed image to Docker Hub as `partnersinhealth/lesotho-emr-seed-lesotho`.
 
 A separate [Update Versions](.github/workflows/update-versions.yml) workflow runs hourly and automatically commits any available snapshot dependency updates to `main`.
