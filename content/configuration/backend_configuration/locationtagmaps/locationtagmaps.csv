@@ -1,2 +1,5 @@
 Location,Check-In Location,Login Location,Medical Record Location,Order Radiology Study Location,Registration Location,Visit Location
 Botsabelo,TRUE,TRUE,TRUE,TRUE,TRUE,TRUE
+Motebang,TRUE,TRUE,,,TRUE,TRUE
+Ntsekhe,TRUE,TRUE,,,TRUE,TRUE
+Community,TRUE,TRUE,,,TRUE,TRUE

@@ -1,2 +1,24 @@
 UUID,Void/Retire,Name,Description,Parent
-14301646-9256-4b8a-85aa-74bb720b5b43,,Botsabelo,Botsabelo Hospital,
+14301646-9256-4b8a-85aa-74bb720b5b43,,Botsabelo,Botsabelo,
+126a55d9-9645-48c4-80e3-0e171f4fde93,,Botsabelo ICU,Botsabelo Intensive Care Unit,Botsabelo
+ba4c66cb-6579-4bce-a91b-dcdb018ee374,,Botsabelo Hospital,Botsabelo Hospital,Botsabelo
+290c3b7e-2ef4-47bc-b801-6570e87fded4,,Botsabelo Halfway Home,Botsabelo Halfway Home,Botsabelo
+365a02e5-5dd3-4990-a53d-69282a66a5aa,,Botsabelo HDU,Botsabelo High Dependency Unit,Botsabelo
+733d0a82-7677-47fb-8bd2-b455cdbc2a99,,Botsabelo OPD,Botsabelo Outpatient Department,Botsabelo
+873e70ff-a3b4-4656-a9e5-cfe11d6470cd,,Motebang,Motebang,
+b4d15954-ed35-49df-8005-93262bd352b3,,Motebang Hospital,Motebang Hospital,Motebang
+028e1ace-45b4-4e96-ae5d-6e98f1f3a097,,Motebang HDU,Motebang High Dependency Unit,Motebang
+2fd6badf-d354-4d80-9c2b-9964e9dffb9e,,Ntsekhe,Ntsekhe,
+001dbdb9-668e-4851-950f-47dbfd71b025,,Ntsekhe Hospital,Ntsekhe,Ntsekhe
+348a07f8-ba0d-499b-b89f-0cdb74302463,,Ntsekhe HDU,Ntsekhe High Dependency Unit,Ntsekhe
+ed3cd22c-0831-4d24-ae32-f4be61754437,,Community,Community-based care locations,
+0755eceb-8601-47d0-85c1-bef0746ab7e5,,Butha-Buthe,Butha-Buthe district,Community
+5767128c-fdc1-4bfe-8421-b83446526016,,Leribe,Leribe district,Community
+524b3af5-ee1b-4f62-b94e-3fd21ee6cf5c,,Berea,Berea district,Community
+6a64a2ff-19a7-4474-ade0-a1b5ff0f7590,,Maseru,Maseru district,Community
+53c6cf58-ab76-400a-80b8-42cf4819645b,,Mafeteng,Mafeteng district,Community
+cb7c638d-8220-4ded-ba63-55c1dad59fd0,,Mohale's Hoek,Mohale's Hoek district,Community
+4de211b2-1a3c-4854-8b2a-2d26ef591796,,Quthing,Quthing district,Community
+19e7d3b8-6cc6-41da-8201-95170427a8cc,,Qacha's Nek,Qacha's Nek district,Community
+7bbfedcf-f44d-4f84-81a6-5ed08a1b864c,,Thaba-Tseka,Thaba-Tseka district,Community
+65e7e773-eb64-4cbd-9265-65bde23de291,,Mokhotlong,Mokhotlong district,Community
