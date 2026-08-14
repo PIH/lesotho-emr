@@ -1,2 +1,3 @@
-Uuid,Name,Identifier type,Base character set,First identifier base,Min length,Max length
-c8f25496-da86-45c3-a621-e9694d89f0b2,EMR ID Generator,${patientIdentifierType.emrId.uuid},ACDEFGHJKLMNPRTUVWXY1234567890,A00000,6,6
+Uuid,Name,Identifier type,Prefix,Base character set,First identifier base,Min length,Max length
+c8f25496-da86-45c3-a621-e9694d89f0b2,EMR ID Generator,${patientIdentifierType.emrId.uuid},,ACDEFGHJKLMNPRTUVWXY1234567890,A00000,6,6
+${identifierSource.mdrtbIdGenerator.uuid},MDR-TB ID Generator,${patientIdentifierType.mdrtbId.uuid},GLC/LS,0123456789,0001,10,10
