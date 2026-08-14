@@ -1,0 +1,5 @@
+UUID,Void/Retire,A is to B,B is to A,Description
+${relationshipType.householdMember.uuid},,Household Member/Worker,Household Member/Worker,Household Member/Worker relationship
+${relationshipType.coworker.uuid},,Coworker,Coworker,Coworker relationship
+${relationshipType.friend.uuid},,Friend,Friend,Friend relationship
+${relationshipType.otherCloseContact.uuid},,Other Close Contact,Other Close Contact,Other Close Contact relationship
