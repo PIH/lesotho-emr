@@ -1,2 +1,3 @@
 Uuid,Identifier Type,Identifier Source,Manual Entry Enabled,Auto Generation Enabled
 8db26bc2-6f25-11f1-9293-c6dbcf623907,${patientIdentifierType.emrId.uuid},${identifierSource.emrIdPool.uuid},false,true
+59fa4849-35ab-474d-8da1-d6bc57d3deea,${patientIdentifierType.mdrtbId.uuid},${identifierSource.mdrtbIdGenerator.uuid},true,true

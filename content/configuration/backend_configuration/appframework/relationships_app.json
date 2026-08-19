@@ -1,0 +1,53 @@
+[
+  {
+    "id": "lesotho.dashboard.relationships",
+    "description": "Relationships widget for the clinician dashboard.",
+    "extensions": [
+      {
+        "extensionPointId": "patientDashboard.secondColumnFragments",
+        "order": 4,
+        "requiredPrivilege": "App: coreapps.patientDashboard",
+        "require": null,
+        "extensionParams": {
+          "provider": "coreapps",
+          "fragment": "dashboardwidgets/dashboardWidget"
+        }
+      }
+    ],
+    "config": {
+      "widget": "relationships",
+      "icon": "fas fa-fw fa-users",
+      "label": "pihcore.relationshipsDashboardWidget.label",
+      "editPrivilege": "Task: coreapps.editRelationships",
+      "dashboardPage": "/pihcore/router/programDashboard.page?patientId={{patientId}}",
+      "maxRecords": "10",
+      "includeRelationshipTypes": "${relationshipType.spousePartner.uuid},${relationshipType.sibling.uuid},${relationshipType.parentChild.uuid},${relationshipType.householdMember.uuid},${relationshipType.coworker.uuid},${relationshipType.friend.uuid},${relationshipType.otherCloseContact.uuid}"
+    }
+  },
+  {
+    "id": "lesotho.registrationSummary.relationships",
+    "description": "Relationships widget for the registration summary page.",
+    "extensions": [
+      {
+        "extensionPointId": "registrationSummary.secondColumnContentFragments",
+        "order": 5,
+        "requiredPrivilege": "App: coreapps.patientDashboard",
+        "require": null,
+        "extensionParams": {
+          "provider": "coreapps",
+          "fragment": "dashboardwidgets/dashboardWidget"
+        }
+      }
+    ],
+    "config": {
+      "widget": "relationships",
+      "icon": "fas fa-fw fa-users",
+      "label": "pihcore.relationshipsDashboardWidget.label",
+      "baseAppPath": "/registrationapp",
+      "editable": "true",
+      "editPrivilege": "Task: coreapps.editRelationships",
+      "dashboardPage": "/registrationapp/registrationSummary.page?patientId={{patientUuid}}&appId=registrationapp.registerPatient",
+      "includeRelationshipTypes": "${relationshipType.spousePartner.uuid},${relationshipType.sibling.uuid},${relationshipType.parentChild.uuid},${relationshipType.householdMember.uuid},${relationshipType.coworker.uuid},${relationshipType.friend.uuid},${relationshipType.otherCloseContact.uuid}"
+    }
+  }
+]

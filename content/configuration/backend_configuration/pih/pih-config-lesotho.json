@@ -5,9 +5,13 @@
   "country": "LESOTHO",
   "site": "CROSS_SITE",
   "components": [
+    "allergies",
     "clinicianDashboard",
+    "mdrtbProgram",
     "myAccount",
+    "patientDocuments",
     "patientRegistration",
+    "programs",
     "radiology",
     "systemAdministration",
     "visitManagement",
