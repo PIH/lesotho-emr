@@ -18,6 +18,15 @@ jobs:
       notify_ci_dashboard: true
     secrets: inherit
 
+  scan:
+    if: github.repository_owner == 'PIH'
+    needs: build-and-publish
+    uses: PIH/openmrs-contrib-distro-tools/.github/workflows/scan-docker-image.yml@main
+    with:
+      image_name: partnersinhealth/lesotho-emr
+    permissions:
+      security-events: write
+
   deploy:
     if: github.repository_owner == 'PIH'
     needs: build-and-publish
