@@ -1,6 +1,6 @@
 # PIH Lesotho EMR Distribution
 
-This repository defines the OpenMRS distribution for PIH Lesotho. It packages together the [PIH EMR](https://github.com/PIH/openmrs-distro-pihemr) parent distribution,
+This repository defines the OpenMRS distribution for PIH Lesotho. It packages together the [PIH EMR](https://github.com/PIH/pihemr) parent distribution,
 Lesotho-specific content, and the PIH EMR frontend into a single deployable artifact.
 For more background on OpenMRS distributions, see the [OpenMRS wiki](https://wiki.openmrs.org/display/docs/OpenMRS+Distributions).
 
