@@ -4,9 +4,18 @@
             <property>default_locale</property>
             <value>en</value>
         </globalProperty>
+        
         <globalProperty>
             <property>locale.allowed.list</property>
             <value>en</value>
         </globalProperty>
+
+        <!-- Order Entry OWA -->
+        <globalProperty>
+            <property>orderentryowa.labOrderablesConceptSet</property>
+            <!-- Concept: Lesotho laboratory orderable categories (PIH:21792) -->
+            <value>da85a0bc-a20b-4e75-b45c-8ce40e64e8f6</value>
+        </globalProperty>
     </globalProperties>
+
 </config>
