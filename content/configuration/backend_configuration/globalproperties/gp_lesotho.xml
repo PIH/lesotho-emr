@@ -16,6 +16,13 @@
             <!-- Concept: Lesotho laboratory orderable categories (PIH:21792) -->
             <value>da85a0bc-a20b-4e75-b45c-8ce40e64e8f6</value>
         </globalProperty>
+
+        <!-- Lab Workflow OWA -->
+        <globalProperty>
+            <property>labworkflowowa.locationOfLaboratory</property>
+            <!-- Concept: Location of laboratory (Lesotho) -->
+            <value>86e19bf2-17ef-4eb7-8cff-b2b61c0430cc</value>
+        </globalProperty>
     </globalProperties>
 
 </config>
