@@ -1,0 +1,3 @@
+Uuid,Void/Retire,Name,Description
+${encounterType.lesothoTbIntake.uuid},,TB Intake,Tuberculosis (TB) intake form for Lesotho
+${encounterType.lesothoTbFollowup.uuid},,TB Followup,Tuberculosis (TB) followup form for Lesotho
