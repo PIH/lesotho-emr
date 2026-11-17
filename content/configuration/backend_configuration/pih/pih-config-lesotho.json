@@ -4,6 +4,7 @@
   "welcomeMessage": "Welcome to the Lesotho EMR",
   "country": "LESOTHO",
   "site": "CROSS_SITE",
+  "dispositionConfig": "file:configuration/pih/pih-dispositions-lesotho.json",
   "components": [
     "allergies",
     "clinicianDashboard",

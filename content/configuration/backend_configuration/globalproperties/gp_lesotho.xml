@@ -10,6 +10,12 @@
             <value>en</value>
         </globalProperty>
 
+        <globalProperty>
+            <property>emr.concept.diagnosisSetOfSets</property>
+            <!-- Concept: Full diagnosis set -->
+            <value>8fcd0b0c-f977-4a66-a1b5-ad7ce68e6770</value>
+        </globalProperty>
+
         <!-- Order Entry OWA -->
         <globalProperty>
             <property>orderentryowa.labOrderablesConceptSet</property>

@@ -1,0 +1,59 @@
+[
+  {
+    "uuid": "admitToHospital",
+    "type": "ADMIT",
+    "careSettingTypes": ["OUTPATIENT"],
+    "name": "disposition.emrapi.admitToHospital",
+    "conceptCode": "PIH:ADMIT TO HOSPITAL",
+    "actions": [],
+    "additionalObs": []
+  },
+  {
+    "uuid": "active",
+    "name": "pihcore.active",
+    "conceptCode": "CIEL:161636",
+    "additionalObs": []
+  },
+  {
+    "uuid": "edObservation",
+    "name": "disposition.mirebalais.edObservation",
+    "conceptCode": "PIH:ED Observation",
+    "keepsVisitOpen": "true",
+    "actions": [],
+    "additionalObs": []
+  },
+  {
+    "uuid": "transferOutOfHospital",
+    "name": "disposition.emrapi.transferOutOfHospital",
+    "conceptCode": "PIH:Transfer out of hospital",
+    "actions": [
+      "dischargeIfAdmittedDispositionAction"
+    ],
+    "additionalObs": [
+      {
+        "label": "disposition.emrapi.transferOutOfHospital.sites",
+        "conceptCode": "PIH:21809",
+        "params": {
+          "id": "transferExternalLocation"
+        }
+      }
+    ]
+  },
+  {
+    "uuid": "transferWithinHospital",
+    "name": "disposition.emrapi.transferInHospital",
+    "conceptCode": "PIH:Transfer within hospital",
+    "actions": [
+      "transferToSpecificLocationDispositionAction"
+    ],
+    "additionalObs": [
+      {
+        "label": "disposition.emrapi.transferInHospital.transferToLocation",
+        "conceptCode": "PIH: REFERRALS ORDERED",
+        "params": {
+          "id": "transferInternalLocation"
+        }
+      }
+    ]
+  }
+]

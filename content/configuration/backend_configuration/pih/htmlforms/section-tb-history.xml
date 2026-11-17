@@ -129,7 +129,7 @@
     </ifMode>
 
     <!-- Program enrollment -->
-    <enrollInProgram programId="MDR-TB" locationTag="Program Location" />
+    <enrollInProgram programId="MDR-TB Program" locationTag="Program Location" />
 
     <section id="chiefComplaint" sectionTag="fieldset" headerTag="legend" headerStyle="title"
              headerCode="pihcore.chiefComplaint.title">
